@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("https://use.typekit.net/sge6bhe.css");
+@import "colors";
+@import "node_modules/hamburgers/_sass/hamburgers/hamburgers";
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: montserrat, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  outline: none;
+}

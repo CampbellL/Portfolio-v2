@@ -1,0 +1,33 @@
+<nav>
+  <button class="hamburger hamburger--spring" [ngClass]="{'is-active': mobileNavIsActive}" type="button"
+          (click)="toggleMobileNavigation()">
+  <span class="hamburger-box">
+    <span class="hamburger-inner"></span>
+  </span>
+  </button>
+  <ul [ngClass]="{'mobile-active': mobileNavIsActive}">
+    <li>
+      <a href="#">Home</a>
+    </li>
+    <li>
+      <a href="#career">
+        Career & Education
+      </a>
+    </li>
+    <li>
+      <a href="#skills">
+        Skills
+      </a>
+    </li>
+    <li>
+      <a href="#projects">
+        Projects
+      </a>
+    </li>
+    <li>
+      <a href="#contact">
+        Contact
+      </a>
+    </li>
+  </ul>
+</nav>

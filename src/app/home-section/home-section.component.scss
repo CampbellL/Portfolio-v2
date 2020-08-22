@@ -1,0 +1,36 @@
+:host {
+  width: 100%;
+  height: 100vh;
+  background: #36538D url("/assets/yancy-min-842ofHC6MaI-unsplash/yancy-min-842ofHC6MaI-unsplash.png");
+  background-blend-mode: multiply;
+  display: flex;
+  align-items: center;
+  div {
+    margin: 0 0 0 100px;
+    color: white;
+    h1 {
+      margin: 10px 0 0;
+      font-size: 34px;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 10px 0 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    p {
+      font-size: 24px;
+      margin: 0;
+    }
+    button {
+      color: white;
+      border: none;
+      margin-top: 10px;
+      padding: 10px 36px;
+      background: #7217E2 0 0 no-repeat padding-box;
+      box-shadow: 0 3px 6px #603C8C;
+      border-radius: 5px;
+      opacity: 1;
+    }
+  }
+}

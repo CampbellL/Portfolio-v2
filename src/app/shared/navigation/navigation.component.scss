@@ -1,0 +1,68 @@
+@import "../../../colors";
+:host{
+  display: block;
+  position: fixed;
+  width: 100%;
+  nav {
+    width: 100%;
+    height: 80px;
+    margin: 0 0 0 100px;
+    ul {
+      padding: 0;
+      height: 100%;
+      width: 40%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      list-style: none;
+      li {
+        a {
+          font-size: 20px;
+          color: white;
+          text-decoration: none;
+          &:link {
+
+          }
+          &:active {
+            color: black;
+            background-color: white;
+          }
+          &:hover {
+            color: black;
+            background-color: white;
+          }
+          &:visited {
+
+          }
+        }
+      }
+    }
+    @media screen and (min-width: 768px) {
+      button{
+        display: none;
+      }
+    }
+    @media screen and (max-width: 768px) {
+      margin: 0;
+      ul{
+        display: none;
+      }
+      ul.mobile-active{
+        padding-top: calc(75% - 80px);
+        padding-bottom: 75%;
+        background-color: $darkPurpleBg;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        li {
+          a{
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
