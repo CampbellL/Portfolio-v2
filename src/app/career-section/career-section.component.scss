@@ -6,15 +6,15 @@
   display: block;
   box-sizing: border-box;
   background-color: $darkPurpleBg;
-  padding-top: 150px;
+  padding-top: 100px;
   padding-left: 100px;
-  overflow: hidden;
+  overflow-y: hidden;
   section{
     background-image: url("/assets/Branch.svg");
     background-repeat: no-repeat;
-    margin-top: 150px;
+    margin-top: 50px;
     padding-left: 15%;
-    height: calc(100% - 150px);
+    height: calc(100% - 50px);
     div.career {
       width: 70%;
       ul {
@@ -25,7 +25,7 @@
           div {
             display: flex;
             span.year {
-              min-width: 10ch;
+              min-width: 11ch;
               margin-right: 100px;
               font-family: "JetBrains Mono", serif;
               font-size: 20px;
@@ -34,6 +34,10 @@
               flex-direction: column;
               h3{
                 font-size: 24px;
+                a {
+                  color: #64c5e2;
+                  text-decoration: none;
+                }
               }
               span{
                 color: #828282;
@@ -47,12 +51,22 @@
         }
         li:nth-of-type(3){
           margin-top: 12vh;
+          h3{
+            a {
+              color: #ED0E41 !important;
+            }
+          }
         }
         li:nth-of-type(4){
           margin-top: 10vh;
         }
         li:nth-of-type(5){
           margin-top: 8vh;
+          h3{
+            a {
+              color: #ED0E41 !important;
+            }
+          }
         }
       }
     }

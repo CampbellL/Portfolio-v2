@@ -1,0 +1,47 @@
+@import "../../colors";
+
+:host {
+  height: calc(100vh - 80px);
+  width: 100%;
+  display: block;
+  background-color: #141D47;
+  padding-top: 100px;
+  padding-left: 100px;
+  padding-right: 100px;
+  section{
+    height: 100%;
+    transform: translateY(-100px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    article{
+      box-shadow: 0 3px 6px #00000029;
+      border-radius: 10px;
+      width: 30%;
+      height: 70%;
+      background-color: white;
+      padding: 3rem;
+      color: #603C8C;
+      h3{
+        color: #603C8C;
+        font-weight: bold;
+        text-align: center;
+        font-size: 23px;
+      }
+      div{
+        padding-top: 10%;
+        height: calc(90% - 3rem);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        h4{
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+@import '../../colors';
+
+:host {
+  display: block;
+  height: calc(100vh - 80px);
+  width: 100%;
+  background-color: $darkPurpleBg;
+  padding-top: 100px;
+  padding-left: 100px;
+  padding-right: 100px;
+  ul{
+    list-style: none;
+    display: flex;
+    padding: 0;
+    li {
+      color: white;
+      margin-right: 1rem;
+      cursor: pointer;
+    }
+    li.active {
+      font-weight: bold;
+    }
+  }
+  section {
+    height: calc(100% - 100px);
+    width: 100%;
+    div{
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      button{
+        background-color: $primary;
+        border: none;
+        border-radius: 5px;
+        padding: .7rem 2rem;
+        color: white;
+        cursor: pointer;
+      }
+    }
+    div.footer{
+      margin-top: 1rem;
+    }
+
+    div.projects {
+      pointer-events: none;
+      height: 85%;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-<nav>
+<nav [ngClass]="{'active':navBackGround}">
   <button class="hamburger hamburger--spring" [ngClass]="{'is-active': mobileNavIsActive}" type="button"
           (click)="toggleMobileNavigation()">
   <span class="hamburger-box">
@@ -10,8 +10,8 @@
       <a href="#">Home</a>
     </li>
     <li>
-      <a href="#career">
-        Career & Education
+      <a href="#projects">
+        Projects
       </a>
     </li>
     <li>
@@ -20,8 +20,8 @@
       </a>
     </li>
     <li>
-      <a href="#projects">
-        Projects
+      <a href="#career">
+        Career & Education
       </a>
     </li>
     <li>
@@ -31,3 +31,8 @@
     </li>
   </ul>
 </nav>
+<div class="linkedIn">
+  <a href="https://www.linkedin.com/in/earl-campbell/">
+    <img src="/assets/icons/linkedin.svg">
+  </a>
+</div>

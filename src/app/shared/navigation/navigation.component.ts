@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {Scroll} from "@angular/router";
 
 @Component({
   selector: 'app-navigation',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationComponent implements OnInit {
   public mobileNavIsActive = false;
+  public navBackGround = false;
   constructor() { }
 
   ngOnInit(): void {
@@ -14,5 +16,9 @@ export class NavigationComponent implements OnInit {
 
   public toggleMobileNavigation(): void {
     this.mobileNavIsActive = !this.mobileNavIsActive;
+  }
+  @HostListener('window:scroll')
+  public onNavScroll(event: Scroll){
+    this.navBackGround = window.scrollY > 100;
   }
 }

@@ -1,0 +1,2225 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"An object with an ID"
+interface Node {
+  "The id of the object."
+  id: ID!
+  "The Stage of an object"
+  stage: Stage!
+}
+
+type Aggregate {
+  count: Int!
+}
+
+"Asset system model"
+type Asset implements Node {
+  "The time the document was created"
+  createdAt(
+    "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
+    variation: SystemDateTimeFieldVariation! = COMBINED
+  ): DateTime!
+  "Get the document in other stages"
+  documentInStages(
+    "Decides if the current stage should be included or not"
+    includeCurrent: Boolean! = false,
+    "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+    inheritLocale: Boolean! = false,
+    "Potential stages that should be returned"
+    stages: [Stage!]! = [PUBLISHED, DRAFT]
+  ): [Asset!]!
+  "The file name"
+  fileName: String!
+  "The file handle"
+  handle: String!
+  "The height of the file"
+  height: Float
+  "List of Asset versions"
+  history(
+    limit: Int! = 10,
+    skip: Int! = 0,
+    "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+    stageOverride: Stage
+  ): [Version!]!
+  "The unique identifier"
+  id: ID!
+  "System Locale field"
+  locale: Locale!
+  "Get the other localizations for this document"
+  localizations(
+    "Decides if the current locale should be included or not"
+    includeCurrent: Boolean! = false,
+    "Potential locales that should be returned"
+    locales: [Locale!]! = [en]
+  ): [Asset!]!
+  "The mime type of the file"
+  mimeType: String
+  projectImage(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, where: ProjectWhereInput): [Project!]!
+  "The time the document was published. Null on documents in draft stage."
+  publishedAt(
+    "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
+    variation: SystemDateTimeFieldVariation! = COMBINED
+  ): DateTime
+  "The file size"
+  size: Float
+  "System stage field"
+  stage: Stage!
+  "The time the document was updated"
+  updatedAt(
+    "Variation of DateTime field to return, allows value from base document, current localization, or combined by returning the newer value of both"
+    variation: SystemDateTimeFieldVariation! = COMBINED
+  ): DateTime!
+  "Get the url for the asset with provided transformations applied."
+  url(transformation: AssetTransformationInput): String!
+  "The file width"
+  width: Float
+}
+
+"A connection to a list of items."
+type AssetConnection {
+  aggregate: Aggregate!
+  "A list of edges."
+  edges: [AssetEdge!]!
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AssetEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Asset!
+}
+
+type BatchPayload {
+  "The number of nodes that have been affected by the Batch operation."
+  count: Long!
+}
+
+type Category implements Node {
+  "The time the document was created"
+  createdAt: DateTime!
+  "Get the document in other stages"
+  documentInStages(
+    "Decides if the current stage should be included or not"
+    includeCurrent: Boolean! = false,
+    "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+    inheritLocale: Boolean! = false,
+    "Potential stages that should be returned"
+    stages: [Stage!]! = [PUBLISHED, DRAFT]
+  ): [Category!]!
+  "List of Category versions"
+  history(
+    limit: Int! = 10,
+    skip: Int! = 0,
+    "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+    stageOverride: Stage
+  ): [Version!]!
+  "The unique identifier"
+  id: ID!
+  projects(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, where: ProjectWhereInput): [Project!]!
+  "The time the document was published. Null on documents in draft stage."
+  publishedAt: DateTime
+  "System stage field"
+  stage: Stage!
+  title: String!
+  "The time the document was updated"
+  updatedAt: DateTime!
+}
+
+"A connection to a list of items."
+type CategoryConnection {
+  aggregate: Aggregate!
+  "A list of edges."
+  edges: [CategoryEdge!]!
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type CategoryEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Category!
+}
+
+"Representing a color value comprising of HEX, RGBA and css color values"
+type Color {
+  css: String!
+  hex: Hex!
+  rgba: RGBA!
+}
+
+type DocumentVersion {
+  createdAt: DateTime!
+  data: Json
+  id: ID!
+  revision: Int!
+  stage: Stage!
+}
+
+"Representing a geolocation point with latitude and longitude"
+type Location {
+  distance(from: LocationInput!): Float!
+  latitude: Float!
+  longitude: Float!
+}
+
+type Mutation {
+  "Create one asset"
+  createAsset(data: AssetCreateInput!): Asset @deprecated(reason : "Asset mutations will be overhauled soon")
+  "Create one category"
+  createCategory(data: CategoryCreateInput!): Category
+  "Create one project"
+  createProject(data: ProjectCreateInput!): Project
+  "Delete one asset from _all_ existing stages. Returns deleted document."
+  deleteAsset(
+    "Document to delete"
+    where: AssetWhereUniqueInput!
+  ): Asset
+  "Delete one category from _all_ existing stages. Returns deleted document."
+  deleteCategory(
+    "Document to delete"
+    where: CategoryWhereUniqueInput!
+  ): Category
+  "Delete many Asset documents"
+  deleteManyAssets(
+    "Documents to delete"
+    where: AssetManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (deleteManyAssetsConnection)")
+  "Delete many Asset documents, return deleted documents"
+  deleteManyAssetsConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    last: Int,
+    skip: Int,
+    "Documents to delete"
+    where: AssetManyWhereInput
+  ): AssetConnection!
+  "Delete many Category documents"
+  deleteManyCategories(
+    "Documents to delete"
+    where: CategoryManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (deleteManyCategoriesConnection)")
+  "Delete many Category documents, return deleted documents"
+  deleteManyCategoriesConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    last: Int,
+    skip: Int,
+    "Documents to delete"
+    where: CategoryManyWhereInput
+  ): CategoryConnection!
+  "Delete many Project documents"
+  deleteManyProjects(
+    "Documents to delete"
+    where: ProjectManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (deleteManyProjectsConnection)")
+  "Delete many Project documents, return deleted documents"
+  deleteManyProjectsConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    last: Int,
+    skip: Int,
+    "Documents to delete"
+    where: ProjectManyWhereInput
+  ): ProjectConnection!
+  "Delete one project from _all_ existing stages. Returns deleted document."
+  deleteProject(
+    "Document to delete"
+    where: ProjectWhereUniqueInput!
+  ): Project
+  "Publish one asset"
+  publishAsset(
+    "Optional localizations to publish"
+    locales: [Locale!],
+    "Publish base document including default localization and relations, as well as selected additional localizations. Returns document in mutation stage."
+    publishBase: Boolean = true,
+    "Publishing target stage"
+    to: [Stage!]! = [PUBLISHED],
+    "Document to publish"
+    where: AssetWhereUniqueInput!
+  ): Asset
+  "Publish one category"
+  publishCategory(
+    "Publishing target stage"
+    to: [Stage!]! = [PUBLISHED],
+    "Document to publish"
+    where: CategoryWhereUniqueInput!
+  ): Category
+  "Publish many Asset documents"
+  publishManyAssets(
+    "Document localizations to publish"
+    locales: [Locale!],
+    "Whether to publish the base document and default localization"
+    publishBase: Boolean = true,
+    "Stages to publish documents to"
+    to: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage to be published"
+    where: AssetManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (publishManyAssetsConnection)")
+  "Publish many Asset documents"
+  publishManyAssetsConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    "Stage to find matching documents in"
+    from: Stage = DRAFT,
+    last: Int,
+    "Document localizations to publish"
+    locales: [Locale!],
+    "Whether to publish the base document and default localization"
+    publishBase: Boolean = true,
+    skip: Int,
+    "Stages to publish documents to"
+    to: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage to be published"
+    where: AssetManyWhereInput
+  ): AssetConnection!
+  "Publish many Category documents"
+  publishManyCategories(
+    "Stages to publish documents to"
+    to: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage to be published"
+    where: CategoryManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (publishManyCategoriesConnection)")
+  "Publish many Category documents"
+  publishManyCategoriesConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    "Stage to find matching documents in"
+    from: Stage = DRAFT,
+    last: Int,
+    skip: Int,
+    "Stages to publish documents to"
+    to: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage to be published"
+    where: CategoryManyWhereInput
+  ): CategoryConnection!
+  "Publish many Project documents"
+  publishManyProjects(
+    "Stages to publish documents to"
+    to: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage to be published"
+    where: ProjectManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (publishManyProjectsConnection)")
+  "Publish many Project documents"
+  publishManyProjectsConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    "Stage to find matching documents in"
+    from: Stage = DRAFT,
+    last: Int,
+    skip: Int,
+    "Stages to publish documents to"
+    to: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage to be published"
+    where: ProjectManyWhereInput
+  ): ProjectConnection!
+  "Publish one project"
+  publishProject(
+    "Publishing target stage"
+    to: [Stage!]! = [PUBLISHED],
+    "Document to publish"
+    where: ProjectWhereUniqueInput!
+  ): Project
+  "Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+  unpublishAsset(
+    "Stages to unpublish document from"
+    from: [Stage!]! = [PUBLISHED],
+    "Optional locales to unpublish. Unpublishing the default locale will completely remove the document from the selected stages"
+    locales: [Locale!],
+    "Unpublish complete document including default localization and relations from stages. Can be disabled."
+    unpublishBase: Boolean = true,
+    "Document to unpublish"
+    where: AssetWhereUniqueInput!
+  ): Asset
+  "Unpublish one category from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+  unpublishCategory(
+    "Stages to unpublish document from"
+    from: [Stage!]! = [PUBLISHED],
+    "Document to unpublish"
+    where: CategoryWhereUniqueInput!
+  ): Category
+  "Unpublish many Asset documents"
+  unpublishManyAssets(
+    "Stages to unpublish documents from"
+    from: [Stage!]! = [PUBLISHED],
+    "Locales to unpublish"
+    locales: [Locale!],
+    "Whether to unpublish the base document and default localization"
+    unpublishBase: Boolean = true,
+    "Identifies documents in each stage"
+    where: AssetManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (unpublishManyAssetsConnection)")
+  "Find many Asset documents that match criteria in specified stage and unpublish from target stages"
+  unpublishManyAssetsConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    "Stages to unpublish documents from"
+    from: [Stage!]! = [PUBLISHED],
+    last: Int,
+    "Locales to unpublish"
+    locales: [Locale!],
+    skip: Int,
+    "Stage to find matching documents in"
+    stage: Stage = DRAFT,
+    "Whether to unpublish the base document and default localization"
+    unpublishBase: Boolean = true,
+    "Identifies documents in draft stage"
+    where: AssetManyWhereInput
+  ): AssetConnection!
+  "Unpublish many Category documents"
+  unpublishManyCategories(
+    "Stages to unpublish documents from"
+    from: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage"
+    where: CategoryManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (unpublishManyCategoriesConnection)")
+  "Find many Category documents that match criteria in specified stage and unpublish from target stages"
+  unpublishManyCategoriesConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    "Stages to unpublish documents from"
+    from: [Stage!]! = [PUBLISHED],
+    last: Int,
+    skip: Int,
+    "Stage to find matching documents in"
+    stage: Stage = DRAFT,
+    "Identifies documents in draft stage"
+    where: CategoryManyWhereInput
+  ): CategoryConnection!
+  "Unpublish many Project documents"
+  unpublishManyProjects(
+    "Stages to unpublish documents from"
+    from: [Stage!]! = [PUBLISHED],
+    "Identifies documents in each stage"
+    where: ProjectManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (unpublishManyProjectsConnection)")
+  "Find many Project documents that match criteria in specified stage and unpublish from target stages"
+  unpublishManyProjectsConnection(
+    after: ID,
+    before: ID,
+    first: Int,
+    "Stages to unpublish documents from"
+    from: [Stage!]! = [PUBLISHED],
+    last: Int,
+    skip: Int,
+    "Stage to find matching documents in"
+    stage: Stage = DRAFT,
+    "Identifies documents in draft stage"
+    where: ProjectManyWhereInput
+  ): ProjectConnection!
+  "Unpublish one project from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+  unpublishProject(
+    "Stages to unpublish document from"
+    from: [Stage!]! = [PUBLISHED],
+    "Document to unpublish"
+    where: ProjectWhereUniqueInput!
+  ): Project
+  "Update one asset"
+  updateAsset(data: AssetUpdateInput!, where: AssetWhereUniqueInput!): Asset
+  "Update one category"
+  updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  "Update many assets"
+  updateManyAssets(
+    "Updates to document content"
+    data: AssetUpdateManyInput!,
+    "Documents to apply update on"
+    where: AssetManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (updateManyAssetsConnection)")
+  "Update many Asset documents"
+  updateManyAssetsConnection(
+    after: ID,
+    before: ID,
+    "Updates to document content"
+    data: AssetUpdateManyInput!,
+    first: Int,
+    last: Int,
+    skip: Int,
+    "Documents to apply update on"
+    where: AssetManyWhereInput
+  ): AssetConnection!
+  "Update many categories"
+  updateManyCategories(
+    "Updates to document content"
+    data: CategoryUpdateManyInput!,
+    "Documents to apply update on"
+    where: CategoryManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (updateManyCategoriesConnection)")
+  "Update many Category documents"
+  updateManyCategoriesConnection(
+    after: ID,
+    before: ID,
+    "Updates to document content"
+    data: CategoryUpdateManyInput!,
+    first: Int,
+    last: Int,
+    skip: Int,
+    "Documents to apply update on"
+    where: CategoryManyWhereInput
+  ): CategoryConnection!
+  "Update many projects"
+  updateManyProjects(
+    "Updates to document content"
+    data: ProjectUpdateManyInput!,
+    "Documents to apply update on"
+    where: ProjectManyWhereInput
+  ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (updateManyProjectsConnection)")
+  "Update many Project documents"
+  updateManyProjectsConnection(
+    after: ID,
+    before: ID,
+    "Updates to document content"
+    data: ProjectUpdateManyInput!,
+    first: Int,
+    last: Int,
+    skip: Int,
+    "Documents to apply update on"
+    where: ProjectManyWhereInput
+  ): ProjectConnection!
+  "Update one project"
+  updateProject(data: ProjectUpdateInput!, where: ProjectWhereUniqueInput!): Project
+  "Upsert one asset"
+  upsertAsset(upsert: AssetUpsertInput!, where: AssetWhereUniqueInput!): Asset
+  "Upsert one category"
+  upsertCategory(upsert: CategoryUpsertInput!, where: CategoryWhereUniqueInput!): Category
+  "Upsert one project"
+  upsertProject(upsert: ProjectUpsertInput!, where: ProjectWhereUniqueInput!): Project
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+  "When paginating forwards, are there more items?"
+  hasNextPage: Boolean!
+  "When paginating backwards, are there more items?"
+  hasPreviousPage: Boolean!
+  "Number of items in the current page."
+  pageSize: Int
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+}
+
+type Project implements Node {
+  category: Category
+  "The time the document was created"
+  createdAt: DateTime!
+  dateOfCreation: Date
+  detailUrlOverride: String
+  "Get the document in other stages"
+  documentInStages(
+    "Decides if the current stage should be included or not"
+    includeCurrent: Boolean! = false,
+    "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+    inheritLocale: Boolean! = false,
+    "Potential stages that should be returned"
+    stages: [Stage!]! = [PUBLISHED, DRAFT]
+  ): [Project!]!
+  "List of Project versions"
+  history(
+    limit: Int! = 10,
+    skip: Int! = 0,
+    "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+    stageOverride: Stage
+  ): [Version!]!
+  "The unique identifier"
+  id: ID!
+  image: Asset
+  projectUrl: String
+  "The time the document was published. Null on documents in draft stage."
+  publishedAt: DateTime
+  shortDescription: String
+  sourceControlUrl: String
+  "System stage field"
+  stage: Stage!
+  title: String!
+  "The time the document was updated"
+  updatedAt: DateTime!
+}
+
+"A connection to a list of items."
+type ProjectConnection {
+  aggregate: Aggregate!
+  "A list of edges."
+  edges: [ProjectEdge!]!
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type ProjectEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Project!
+}
+
+type Query {
+  "Retrieve a single asset"
+  asset(
+    "First locale matched will be used based on the order of this input"
+    locales: [Locale!]! = [en],
+    stage: Stage! = PUBLISHED,
+    where: AssetWhereUniqueInput!
+  ): Asset
+  "Retrieve document version"
+  assetVersion(where: VersionWhereInput!): DocumentVersion
+  "Retrieve multiple assets"
+  assets(
+    after: String,
+    before: String,
+    first: Int,
+    last: Int,
+    "First locale matched will be used based on the order of this input"
+    locales: [Locale!]! = [en],
+    orderBy: AssetOrderByInput,
+    skip: Int,
+    stage: Stage! = PUBLISHED,
+    where: AssetWhereInput
+  ): [Asset!]!
+  "Retrieve multiple assets using the Relay connection interface"
+  assetsConnection(
+    after: String,
+    before: String,
+    first: Int,
+    last: Int,
+    "First locale matched will be used based on the order of this input"
+    locales: [Locale!]! = [en],
+    orderBy: AssetOrderByInput,
+    skip: Int,
+    stage: Stage! = PUBLISHED,
+    where: AssetWhereInput
+  ): AssetConnection!
+  "Retrieve multiple categories"
+  categories(after: String, before: String, first: Int, last: Int, orderBy: CategoryOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: CategoryWhereInput): [Category!]!
+  "Retrieve multiple categories using the Relay connection interface"
+  categoriesConnection(after: String, before: String, first: Int, last: Int, orderBy: CategoryOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: CategoryWhereInput): CategoryConnection!
+  "Retrieve a single category"
+  category(stage: Stage! = PUBLISHED, where: CategoryWhereUniqueInput!): Category
+  "Retrieve document version"
+  categoryVersion(where: VersionWhereInput!): DocumentVersion
+  "Fetches an object given its ID"
+  node(
+    "The ID of an object"
+    id: ID!,
+    "First locale matched will be used based on the order of this input"
+    locales: [Locale!]! = [en],
+    stage: Stage! = PUBLISHED
+  ): Node
+  "Retrieve a single project"
+  project(stage: Stage! = PUBLISHED, where: ProjectWhereUniqueInput!): Project
+  "Retrieve document version"
+  projectVersion(where: VersionWhereInput!): DocumentVersion
+  "Retrieve multiple projects"
+  projects(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: ProjectWhereInput): [Project!]!
+  "Retrieve multiple projects using the Relay connection interface"
+  projectsConnection(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, stage: Stage! = PUBLISHED, where: ProjectWhereInput): ProjectConnection!
+}
+
+"Representing a RGBA color value: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba()"
+type RGBA {
+  a: RGBATransparency!
+  b: RGBAHue!
+  g: RGBAHue!
+  r: RGBAHue!
+}
+
+"Custom type representing a rich text value comprising of raw rich text ast, html, markdown and text values"
+type RichText {
+  "Returns HTMl representation"
+  html: String!
+  "Returns Markdown representation"
+  markdown: String!
+  "Returns AST representation"
+  raw: RichTextAST!
+  "Returns plain-text contents of RichText"
+  text: String!
+}
+
+type Version {
+  createdAt: DateTime!
+  id: ID!
+  revision: Int!
+  stage: Stage!
+}
+
+enum AssetOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  fileName_ASC
+  fileName_DESC
+  handle_ASC
+  handle_DESC
+  height_ASC
+  height_DESC
+  id_ASC
+  id_DESC
+  mimeType_ASC
+  mimeType_DESC
+  publishedAt_ASC
+  publishedAt_DESC
+  size_ASC
+  size_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  width_ASC
+  width_DESC
+}
+
+enum CategoryOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  id_ASC
+  id_DESC
+  publishedAt_ASC
+  publishedAt_DESC
+  title_ASC
+  title_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+enum DocumentFileTypes {
+  doc
+  docx
+  html
+  jpg
+  odp
+  ods
+  odt
+  pdf
+  png
+  ppt
+  pptx
+  svg
+  txt
+  webp
+  xls
+  xlsx
+}
+
+enum ImageFit {
+  "Resizes the image to fit within the specified parameters without distorting, cropping, or changing the aspect ratio."
+  clip
+  "Resizes the image to fit the specified parameters exactly by removing any parts of the image that don't fit within the boundaries."
+  crop
+  "Resizes the image to fit within the parameters, but as opposed to 'fit:clip' will not scale the image if the image is smaller than the output size."
+  max
+  "Resizes the image to fit the specified parameters exactly by scaling the image to the desired size. The aspect ratio of the image is not respected and the image can be distorted using this method."
+  scale
+}
+
+"Locale system enumeration"
+enum Locale {
+  "System locale"
+  en
+}
+
+enum ProjectOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  dateOfCreation_ASC
+  dateOfCreation_DESC
+  detailUrlOverride_ASC
+  detailUrlOverride_DESC
+  id_ASC
+  id_DESC
+  projectUrl_ASC
+  projectUrl_DESC
+  publishedAt_ASC
+  publishedAt_DESC
+  shortDescription_ASC
+  shortDescription_DESC
+  sourceControlUrl_ASC
+  sourceControlUrl_DESC
+  title_ASC
+  title_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+"Stage system enumeration"
+enum Stage {
+  "System Draft Stage"
+  DRAFT
+  "System Published Stage"
+  PUBLISHED
+}
+
+enum SystemDateTimeFieldVariation {
+  BASE
+  COMBINED
+  LOCALIZATION
+}
+
+enum _FilterKind {
+  AND
+  NOT
+  OR
+  contains
+  contains_all
+  contains_none
+  contains_some
+  ends_with
+  eq
+  eq_not
+  gt
+  gte
+  in
+  lt
+  lte
+  not_contains
+  not_ends_with
+  not_in
+  not_starts_with
+  relational_every
+  relational_none
+  relational_single
+  relational_some
+  search
+  starts_with
+}
+
+enum _MutationInputFieldKind {
+  enum
+  relation
+  richText
+  scalar
+  union
+  virtual
+}
+
+enum _MutationKind {
+  create
+  delete
+  deleteMany
+  publish
+  publishMany
+  unpublish
+  unpublishMany
+  update
+  updateMany
+  upsert
+}
+
+enum _OrderDirection {
+  asc
+  desc
+}
+
+enum _RelationInputCardinality {
+  many
+  one
+}
+
+enum _RelationInputKind {
+  create
+  update
+}
+
+enum _RelationKind {
+  regular
+  union
+}
+
+enum _SystemDateTimeFieldVariation {
+  base
+  combined
+  localization
+}
+
+input AssetConnectInput {
+  "Allow to specify document position in list of connected documents, will default to appending at end of list"
+  position: ConnectPositionInput
+  "Document to connect"
+  where: AssetWhereUniqueInput!
+}
+
+input AssetCreateInput {
+  createdAt: DateTime
+  fileName: String!
+  handle: String!
+  height: Float
+  "Inline mutations for managing document localizations excluding the default locale"
+  localizations: AssetCreateLocalizationsInput
+  mimeType: String
+  projectImage: ProjectCreateManyInlineInput
+  size: Float
+  updatedAt: DateTime
+  width: Float
+}
+
+input AssetCreateLocalizationDataInput {
+  createdAt: DateTime
+  fileName: String!
+  handle: String!
+  height: Float
+  mimeType: String
+  size: Float
+  updatedAt: DateTime
+  width: Float
+}
+
+input AssetCreateLocalizationInput {
+  "Localization input"
+  data: AssetCreateLocalizationDataInput!
+  locale: Locale!
+}
+
+input AssetCreateLocalizationsInput {
+  "Create localizations for the newly-created document"
+  create: [AssetCreateLocalizationInput!]
+}
+
+input AssetCreateManyInlineInput {
+  "Connect multiple existing Asset documents"
+  connect: [AssetWhereUniqueInput!]
+  "Create and connect multiple existing Asset documents"
+  create: [AssetCreateInput!]
+}
+
+input AssetCreateOneInlineInput {
+  "Connect one existing Asset document"
+  connect: AssetWhereUniqueInput
+  "Create and connect one Asset document"
+  create: AssetCreateInput
+}
+
+"Identifies documents"
+input AssetManyWhereInput {
+  "Logical AND on all given filters."
+  AND: [AssetWhereInput!]
+  "Logical NOT on all given filters combined by AND."
+  NOT: [AssetWhereInput!]
+  "Logical OR on all given filters."
+  OR: [AssetWhereInput!]
+  "Contains search across all appropriate fields."
+  _search: String
+  createdAt: DateTime
+  "All values greater than the given value."
+  createdAt_gt: DateTime
+  "All values greater than or equal the given value."
+  createdAt_gte: DateTime
+  "All values that are contained in given list."
+  createdAt_in: [DateTime!]
+  "All values less than the given value."
+  createdAt_lt: DateTime
+  "All values less than or equal the given value."
+  createdAt_lte: DateTime
+  "All values that are not equal to given value."
+  createdAt_not: DateTime
+  "All values that are not contained in given list."
+  createdAt_not_in: [DateTime!]
+  id: ID
+  "All values containing the given string."
+  id_contains: ID
+  "All values ending with the given string."
+  id_ends_with: ID
+  "All values that are contained in given list."
+  id_in: [ID!]
+  "All values that are not equal to given value."
+  id_not: ID
+  "All values not containing the given string."
+  id_not_contains: ID
+  "All values not ending with the given string"
+  id_not_ends_with: ID
+  "All values that are not contained in given list."
+  id_not_in: [ID!]
+  "All values not starting with the given string."
+  id_not_starts_with: ID
+  "All values starting with the given string."
+  id_starts_with: ID
+  projectImage_every: ProjectWhereInput
+  projectImage_none: ProjectWhereInput
+  projectImage_some: ProjectWhereInput
+  publishedAt: DateTime
+  "All values greater than the given value."
+  publishedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  publishedAt_gte: DateTime
+  "All values that are contained in given list."
+  publishedAt_in: [DateTime!]
+  "All values less than the given value."
+  publishedAt_lt: DateTime
+  "All values less than or equal the given value."
+  publishedAt_lte: DateTime
+  "All values that are not equal to given value."
+  publishedAt_not: DateTime
+  "All values that are not contained in given list."
+  publishedAt_not_in: [DateTime!]
+  updatedAt: DateTime
+  "All values greater than the given value."
+  updatedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  updatedAt_gte: DateTime
+  "All values that are contained in given list."
+  updatedAt_in: [DateTime!]
+  "All values less than the given value."
+  updatedAt_lt: DateTime
+  "All values less than or equal the given value."
+  updatedAt_lte: DateTime
+  "All values that are not equal to given value."
+  updatedAt_not: DateTime
+  "All values that are not contained in given list."
+  updatedAt_not_in: [DateTime!]
+}
+
+"Transformations for Assets"
+input AssetTransformationInput {
+  document: DocumentTransformationInput
+  image: ImageTransformationInput
+  "Pass true if you want to validate the passed transformation parameters"
+  validateOptions: Boolean = false
+}
+
+input AssetUpdateInput {
+  fileName: String
+  handle: String
+  height: Float
+  "Manage document localizations"
+  localizations: AssetUpdateLocalizationsInput
+  mimeType: String
+  projectImage: ProjectUpdateManyInlineInput
+  size: Float
+  width: Float
+}
+
+input AssetUpdateLocalizationDataInput {
+  fileName: String
+  handle: String
+  height: Float
+  mimeType: String
+  size: Float
+  width: Float
+}
+
+input AssetUpdateLocalizationInput {
+  data: AssetUpdateLocalizationDataInput!
+  locale: Locale!
+}
+
+input AssetUpdateLocalizationsInput {
+  "Localizations to create"
+  create: [AssetCreateLocalizationInput!]
+  "Localizations to delete"
+  delete: [Locale!]
+  "Localizations to update"
+  update: [AssetUpdateLocalizationInput!]
+  upsert: [AssetUpsertLocalizationInput!]
+}
+
+input AssetUpdateManyInlineInput {
+  "Connect multiple existing Asset documents"
+  connect: [AssetConnectInput!]
+  "Create and connect multiple Asset documents"
+  create: [AssetCreateInput!]
+  "Delete multiple Asset documents"
+  delete: [AssetWhereUniqueInput!]
+  "Disconnect multiple Asset documents"
+  disconnect: [AssetWhereUniqueInput!]
+  "Override currently-connected documents with multiple existing Asset documents"
+  set: [AssetWhereUniqueInput!]
+  "Update multiple Asset documents"
+  update: [AssetUpdateWithNestedWhereUniqueInput!]
+  "Upsert multiple Asset documents"
+  upsert: [AssetUpsertWithNestedWhereUniqueInput!]
+}
+
+input AssetUpdateManyInput {
+  fileName: String!
+  height: Float
+  "Optional updates to localizations"
+  localizations: AssetUpdateManyLocalizationsInput
+  mimeType: String
+  size: Float
+  width: Float
+}
+
+input AssetUpdateManyLocalizationDataInput {
+  fileName: String
+  height: Float
+  mimeType: String
+  size: Float
+  width: Float
+}
+
+input AssetUpdateManyLocalizationInput {
+  data: AssetUpdateManyLocalizationDataInput!
+  locale: Locale!
+}
+
+input AssetUpdateManyLocalizationsInput {
+  "Localizations to update"
+  update: [AssetUpdateManyLocalizationInput!]
+}
+
+input AssetUpdateManyWithNestedWhereInput {
+  "Update many input"
+  data: AssetUpdateManyInput!
+  "Document search"
+  where: AssetWhereInput!
+}
+
+input AssetUpdateOneInlineInput {
+  "Connect existing Asset document"
+  connect: AssetWhereUniqueInput
+  "Create and connect one Asset document"
+  create: AssetCreateInput
+  "Delete currently connected Asset document"
+  delete: Boolean
+  "Disconnect currently connected Asset document"
+  disconnect: Boolean
+  "Update single Asset document"
+  update: AssetUpdateWithNestedWhereUniqueInput
+  "Upsert single Asset document"
+  upsert: AssetUpsertWithNestedWhereUniqueInput
+}
+
+input AssetUpdateWithNestedWhereUniqueInput {
+  "Document to update"
+  data: AssetUpdateInput!
+  "Unique document search"
+  where: AssetWhereUniqueInput!
+}
+
+input AssetUpsertInput {
+  "Create document if it didn't exist"
+  create: AssetCreateInput!
+  "Update document if it exists"
+  update: AssetUpdateInput!
+}
+
+input AssetUpsertLocalizationInput {
+  create: AssetCreateLocalizationDataInput!
+  locale: Locale!
+  update: AssetUpdateLocalizationDataInput!
+}
+
+input AssetUpsertWithNestedWhereUniqueInput {
+  "Upsert data"
+  data: AssetUpsertInput!
+  "Unique document search"
+  where: AssetWhereUniqueInput!
+}
+
+"Identifies documents"
+input AssetWhereInput {
+  "Logical AND on all given filters."
+  AND: [AssetWhereInput!]
+  "Logical NOT on all given filters combined by AND."
+  NOT: [AssetWhereInput!]
+  "Logical OR on all given filters."
+  OR: [AssetWhereInput!]
+  "Contains search across all appropriate fields."
+  _search: String
+  createdAt: DateTime
+  "All values greater than the given value."
+  createdAt_gt: DateTime
+  "All values greater than or equal the given value."
+  createdAt_gte: DateTime
+  "All values that are contained in given list."
+  createdAt_in: [DateTime!]
+  "All values less than the given value."
+  createdAt_lt: DateTime
+  "All values less than or equal the given value."
+  createdAt_lte: DateTime
+  "All values that are not equal to given value."
+  createdAt_not: DateTime
+  "All values that are not contained in given list."
+  createdAt_not_in: [DateTime!]
+  fileName: String
+  "All values containing the given string."
+  fileName_contains: String
+  "All values ending with the given string."
+  fileName_ends_with: String
+  "All values that are contained in given list."
+  fileName_in: [String!]
+  "All values that are not equal to given value."
+  fileName_not: String
+  "All values not containing the given string."
+  fileName_not_contains: String
+  "All values not ending with the given string"
+  fileName_not_ends_with: String
+  "All values that are not contained in given list."
+  fileName_not_in: [String!]
+  "All values not starting with the given string."
+  fileName_not_starts_with: String
+  "All values starting with the given string."
+  fileName_starts_with: String
+  handle: String
+  "All values containing the given string."
+  handle_contains: String
+  "All values ending with the given string."
+  handle_ends_with: String
+  "All values that are contained in given list."
+  handle_in: [String!]
+  "All values that are not equal to given value."
+  handle_not: String
+  "All values not containing the given string."
+  handle_not_contains: String
+  "All values not ending with the given string"
+  handle_not_ends_with: String
+  "All values that are not contained in given list."
+  handle_not_in: [String!]
+  "All values not starting with the given string."
+  handle_not_starts_with: String
+  "All values starting with the given string."
+  handle_starts_with: String
+  height: Float
+  "All values greater than the given value."
+  height_gt: Float
+  "All values greater than or equal the given value."
+  height_gte: Float
+  "All values that are contained in given list."
+  height_in: [Float!]
+  "All values less than the given value."
+  height_lt: Float
+  "All values less than or equal the given value."
+  height_lte: Float
+  "All values that are not equal to given value."
+  height_not: Float
+  "All values that are not contained in given list."
+  height_not_in: [Float!]
+  id: ID
+  "All values containing the given string."
+  id_contains: ID
+  "All values ending with the given string."
+  id_ends_with: ID
+  "All values that are contained in given list."
+  id_in: [ID!]
+  "All values that are not equal to given value."
+  id_not: ID
+  "All values not containing the given string."
+  id_not_contains: ID
+  "All values not ending with the given string"
+  id_not_ends_with: ID
+  "All values that are not contained in given list."
+  id_not_in: [ID!]
+  "All values not starting with the given string."
+  id_not_starts_with: ID
+  "All values starting with the given string."
+  id_starts_with: ID
+  mimeType: String
+  "All values containing the given string."
+  mimeType_contains: String
+  "All values ending with the given string."
+  mimeType_ends_with: String
+  "All values that are contained in given list."
+  mimeType_in: [String!]
+  "All values that are not equal to given value."
+  mimeType_not: String
+  "All values not containing the given string."
+  mimeType_not_contains: String
+  "All values not ending with the given string"
+  mimeType_not_ends_with: String
+  "All values that are not contained in given list."
+  mimeType_not_in: [String!]
+  "All values not starting with the given string."
+  mimeType_not_starts_with: String
+  "All values starting with the given string."
+  mimeType_starts_with: String
+  projectImage_every: ProjectWhereInput
+  projectImage_none: ProjectWhereInput
+  projectImage_some: ProjectWhereInput
+  publishedAt: DateTime
+  "All values greater than the given value."
+  publishedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  publishedAt_gte: DateTime
+  "All values that are contained in given list."
+  publishedAt_in: [DateTime!]
+  "All values less than the given value."
+  publishedAt_lt: DateTime
+  "All values less than or equal the given value."
+  publishedAt_lte: DateTime
+  "All values that are not equal to given value."
+  publishedAt_not: DateTime
+  "All values that are not contained in given list."
+  publishedAt_not_in: [DateTime!]
+  size: Float
+  "All values greater than the given value."
+  size_gt: Float
+  "All values greater than or equal the given value."
+  size_gte: Float
+  "All values that are contained in given list."
+  size_in: [Float!]
+  "All values less than the given value."
+  size_lt: Float
+  "All values less than or equal the given value."
+  size_lte: Float
+  "All values that are not equal to given value."
+  size_not: Float
+  "All values that are not contained in given list."
+  size_not_in: [Float!]
+  updatedAt: DateTime
+  "All values greater than the given value."
+  updatedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  updatedAt_gte: DateTime
+  "All values that are contained in given list."
+  updatedAt_in: [DateTime!]
+  "All values less than the given value."
+  updatedAt_lt: DateTime
+  "All values less than or equal the given value."
+  updatedAt_lte: DateTime
+  "All values that are not equal to given value."
+  updatedAt_not: DateTime
+  "All values that are not contained in given list."
+  updatedAt_not_in: [DateTime!]
+  width: Float
+  "All values greater than the given value."
+  width_gt: Float
+  "All values greater than or equal the given value."
+  width_gte: Float
+  "All values that are contained in given list."
+  width_in: [Float!]
+  "All values less than the given value."
+  width_lt: Float
+  "All values less than or equal the given value."
+  width_lte: Float
+  "All values that are not equal to given value."
+  width_not: Float
+  "All values that are not contained in given list."
+  width_not_in: [Float!]
+}
+
+"References Asset record uniquely"
+input AssetWhereUniqueInput {
+  id: ID
+}
+
+input CategoryConnectInput {
+  "Allow to specify document position in list of connected documents, will default to appending at end of list"
+  position: ConnectPositionInput
+  "Document to connect"
+  where: CategoryWhereUniqueInput!
+}
+
+input CategoryCreateInput {
+  createdAt: DateTime
+  projects: ProjectCreateManyInlineInput
+  title: String!
+  updatedAt: DateTime
+}
+
+input CategoryCreateManyInlineInput {
+  "Connect multiple existing Category documents"
+  connect: [CategoryWhereUniqueInput!]
+  "Create and connect multiple existing Category documents"
+  create: [CategoryCreateInput!]
+}
+
+input CategoryCreateOneInlineInput {
+  "Connect one existing Category document"
+  connect: CategoryWhereUniqueInput
+  "Create and connect one Category document"
+  create: CategoryCreateInput
+}
+
+"Identifies documents"
+input CategoryManyWhereInput {
+  "Logical AND on all given filters."
+  AND: [CategoryWhereInput!]
+  "Logical NOT on all given filters combined by AND."
+  NOT: [CategoryWhereInput!]
+  "Logical OR on all given filters."
+  OR: [CategoryWhereInput!]
+  "Contains search across all appropriate fields."
+  _search: String
+  createdAt: DateTime
+  "All values greater than the given value."
+  createdAt_gt: DateTime
+  "All values greater than or equal the given value."
+  createdAt_gte: DateTime
+  "All values that are contained in given list."
+  createdAt_in: [DateTime!]
+  "All values less than the given value."
+  createdAt_lt: DateTime
+  "All values less than or equal the given value."
+  createdAt_lte: DateTime
+  "All values that are not equal to given value."
+  createdAt_not: DateTime
+  "All values that are not contained in given list."
+  createdAt_not_in: [DateTime!]
+  id: ID
+  "All values containing the given string."
+  id_contains: ID
+  "All values ending with the given string."
+  id_ends_with: ID
+  "All values that are contained in given list."
+  id_in: [ID!]
+  "All values that are not equal to given value."
+  id_not: ID
+  "All values not containing the given string."
+  id_not_contains: ID
+  "All values not ending with the given string"
+  id_not_ends_with: ID
+  "All values that are not contained in given list."
+  id_not_in: [ID!]
+  "All values not starting with the given string."
+  id_not_starts_with: ID
+  "All values starting with the given string."
+  id_starts_with: ID
+  projects_every: ProjectWhereInput
+  projects_none: ProjectWhereInput
+  projects_some: ProjectWhereInput
+  publishedAt: DateTime
+  "All values greater than the given value."
+  publishedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  publishedAt_gte: DateTime
+  "All values that are contained in given list."
+  publishedAt_in: [DateTime!]
+  "All values less than the given value."
+  publishedAt_lt: DateTime
+  "All values less than or equal the given value."
+  publishedAt_lte: DateTime
+  "All values that are not equal to given value."
+  publishedAt_not: DateTime
+  "All values that are not contained in given list."
+  publishedAt_not_in: [DateTime!]
+  title: String
+  "All values containing the given string."
+  title_contains: String
+  "All values ending with the given string."
+  title_ends_with: String
+  "All values that are contained in given list."
+  title_in: [String!]
+  "All values that are not equal to given value."
+  title_not: String
+  "All values not containing the given string."
+  title_not_contains: String
+  "All values not ending with the given string"
+  title_not_ends_with: String
+  "All values that are not contained in given list."
+  title_not_in: [String!]
+  "All values not starting with the given string."
+  title_not_starts_with: String
+  "All values starting with the given string."
+  title_starts_with: String
+  updatedAt: DateTime
+  "All values greater than the given value."
+  updatedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  updatedAt_gte: DateTime
+  "All values that are contained in given list."
+  updatedAt_in: [DateTime!]
+  "All values less than the given value."
+  updatedAt_lt: DateTime
+  "All values less than or equal the given value."
+  updatedAt_lte: DateTime
+  "All values that are not equal to given value."
+  updatedAt_not: DateTime
+  "All values that are not contained in given list."
+  updatedAt_not_in: [DateTime!]
+}
+
+input CategoryUpdateInput {
+  projects: ProjectUpdateManyInlineInput
+  title: String
+}
+
+input CategoryUpdateManyInlineInput {
+  "Connect multiple existing Category documents"
+  connect: [CategoryConnectInput!]
+  "Create and connect multiple Category documents"
+  create: [CategoryCreateInput!]
+  "Delete multiple Category documents"
+  delete: [CategoryWhereUniqueInput!]
+  "Disconnect multiple Category documents"
+  disconnect: [CategoryWhereUniqueInput!]
+  "Override currently-connected documents with multiple existing Category documents"
+  set: [CategoryWhereUniqueInput!]
+  "Update multiple Category documents"
+  update: [CategoryUpdateWithNestedWhereUniqueInput!]
+  "Upsert multiple Category documents"
+  upsert: [CategoryUpsertWithNestedWhereUniqueInput!]
+}
+
+input CategoryUpdateManyInput {
+  "No fields in updateMany data input"
+  _: String
+}
+
+input CategoryUpdateManyWithNestedWhereInput {
+  "Update many input"
+  data: CategoryUpdateManyInput!
+  "Document search"
+  where: CategoryWhereInput!
+}
+
+input CategoryUpdateOneInlineInput {
+  "Connect existing Category document"
+  connect: CategoryWhereUniqueInput
+  "Create and connect one Category document"
+  create: CategoryCreateInput
+  "Delete currently connected Category document"
+  delete: Boolean
+  "Disconnect currently connected Category document"
+  disconnect: Boolean
+  "Update single Category document"
+  update: CategoryUpdateWithNestedWhereUniqueInput
+  "Upsert single Category document"
+  upsert: CategoryUpsertWithNestedWhereUniqueInput
+}
+
+input CategoryUpdateWithNestedWhereUniqueInput {
+  "Document to update"
+  data: CategoryUpdateInput!
+  "Unique document search"
+  where: CategoryWhereUniqueInput!
+}
+
+input CategoryUpsertInput {
+  "Create document if it didn't exist"
+  create: CategoryCreateInput!
+  "Update document if it exists"
+  update: CategoryUpdateInput!
+}
+
+input CategoryUpsertWithNestedWhereUniqueInput {
+  "Upsert data"
+  data: CategoryUpsertInput!
+  "Unique document search"
+  where: CategoryWhereUniqueInput!
+}
+
+"Identifies documents"
+input CategoryWhereInput {
+  "Logical AND on all given filters."
+  AND: [CategoryWhereInput!]
+  "Logical NOT on all given filters combined by AND."
+  NOT: [CategoryWhereInput!]
+  "Logical OR on all given filters."
+  OR: [CategoryWhereInput!]
+  "Contains search across all appropriate fields."
+  _search: String
+  createdAt: DateTime
+  "All values greater than the given value."
+  createdAt_gt: DateTime
+  "All values greater than or equal the given value."
+  createdAt_gte: DateTime
+  "All values that are contained in given list."
+  createdAt_in: [DateTime!]
+  "All values less than the given value."
+  createdAt_lt: DateTime
+  "All values less than or equal the given value."
+  createdAt_lte: DateTime
+  "All values that are not equal to given value."
+  createdAt_not: DateTime
+  "All values that are not contained in given list."
+  createdAt_not_in: [DateTime!]
+  id: ID
+  "All values containing the given string."
+  id_contains: ID
+  "All values ending with the given string."
+  id_ends_with: ID
+  "All values that are contained in given list."
+  id_in: [ID!]
+  "All values that are not equal to given value."
+  id_not: ID
+  "All values not containing the given string."
+  id_not_contains: ID
+  "All values not ending with the given string"
+  id_not_ends_with: ID
+  "All values that are not contained in given list."
+  id_not_in: [ID!]
+  "All values not starting with the given string."
+  id_not_starts_with: ID
+  "All values starting with the given string."
+  id_starts_with: ID
+  projects_every: ProjectWhereInput
+  projects_none: ProjectWhereInput
+  projects_some: ProjectWhereInput
+  publishedAt: DateTime
+  "All values greater than the given value."
+  publishedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  publishedAt_gte: DateTime
+  "All values that are contained in given list."
+  publishedAt_in: [DateTime!]
+  "All values less than the given value."
+  publishedAt_lt: DateTime
+  "All values less than or equal the given value."
+  publishedAt_lte: DateTime
+  "All values that are not equal to given value."
+  publishedAt_not: DateTime
+  "All values that are not contained in given list."
+  publishedAt_not_in: [DateTime!]
+  title: String
+  "All values containing the given string."
+  title_contains: String
+  "All values ending with the given string."
+  title_ends_with: String
+  "All values that are contained in given list."
+  title_in: [String!]
+  "All values that are not equal to given value."
+  title_not: String
+  "All values not containing the given string."
+  title_not_contains: String
+  "All values not ending with the given string"
+  title_not_ends_with: String
+  "All values that are not contained in given list."
+  title_not_in: [String!]
+  "All values not starting with the given string."
+  title_not_starts_with: String
+  "All values starting with the given string."
+  title_starts_with: String
+  updatedAt: DateTime
+  "All values greater than the given value."
+  updatedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  updatedAt_gte: DateTime
+  "All values that are contained in given list."
+  updatedAt_in: [DateTime!]
+  "All values less than the given value."
+  updatedAt_lt: DateTime
+  "All values less than or equal the given value."
+  updatedAt_lte: DateTime
+  "All values that are not equal to given value."
+  updatedAt_not: DateTime
+  "All values that are not contained in given list."
+  updatedAt_not_in: [DateTime!]
+}
+
+"References Category record uniquely"
+input CategoryWhereUniqueInput {
+  id: ID
+  title: String
+}
+
+"Accepts either HEX or RGBA color value. At least one of hex or rgba value should be passed. If both are passed RGBA is used."
+input ColorInput {
+  hex: Hex
+  rgba: RGBAInput
+}
+
+input ConnectPositionInput {
+  "Connect document after specified document"
+  after: ID
+  "Connect document before specified document"
+  before: ID
+  "Connect document at last position"
+  end: Boolean
+  "Connect document at first position"
+  start: Boolean
+}
+
+input DocumentOutputInput {
+  """
+
+  Transforms a document into a desired file type.
+  See this matrix for format support:
+
+  PDF:  jpg, odp, ods, odt, png, svg, txt, and webp
+  DOC:  docx, html, jpg, odt, pdf, png, svg, txt, and webp
+  DOCX:  doc, html, jpg, odt, pdf, png, svg, txt, and webp
+  ODT:  doc, docx, html, jpg, pdf, png, svg, txt, and webp
+  XLS:  jpg, pdf, ods, png, svg, xlsx, and webp
+  XLSX:  jpg, pdf, ods, png, svg, xls, and webp
+  ODS:  jpg, pdf, png, xls, svg, xlsx, and webp
+  PPT:  jpg, odp, pdf, png, svg, pptx, and webp
+  PPTX:  jpg, odp, pdf, png, svg, ppt, and webp
+  ODP:  jpg, pdf, png, ppt, svg, pptx, and webp
+  BMP:  jpg, odp, ods, odt, pdf, png, svg, and webp
+  GIF:  jpg, odp, ods, odt, pdf, png, svg, and webp
+  JPG:  jpg, odp, ods, odt, pdf, png, svg, and webp
+  PNG:  jpg, odp, ods, odt, pdf, png, svg, and webp
+  WEBP:  jpg, odp, ods, odt, pdf, png, svg, and webp
+  TIFF:  jpg, odp, ods, odt, pdf, png, svg, and webp
+  AI:      jpg, odp, ods, odt, pdf, png, svg, and webp
+  PSD:  jpg, odp, ods, odt, pdf, png, svg, and webp
+  SVG:  jpg, odp, ods, odt, pdf, png, and webp
+  HTML:  jpg, odt, pdf, svg, txt, and webp
+  TXT:  jpg, html, odt, pdf, svg, and webp
+  """
+  format: DocumentFileTypes
+}
+
+"Transformations for Documents"
+input DocumentTransformationInput {
+  "Changes the output for the file."
+  output: DocumentOutputInput
+}
+
+input ImageResizeInput {
+  "The default value for the fit parameter is fit:clip."
+  fit: ImageFit
+  "The height in pixels to resize the image to. The value must be an integer from 1 to 10000."
+  height: Int
+  "The width in pixels to resize the image to. The value must be an integer from 1 to 10000."
+  width: Int
+}
+
+"Transformations for Images"
+input ImageTransformationInput {
+  "Resizes the image"
+  resize: ImageResizeInput
+}
+
+"Input for a geolocation point with latitude and longitude"
+input LocationInput {
+  latitude: Float!
+  longitude: Float!
+}
+
+input ProjectConnectInput {
+  "Allow to specify document position in list of connected documents, will default to appending at end of list"
+  position: ConnectPositionInput
+  "Document to connect"
+  where: ProjectWhereUniqueInput!
+}
+
+input ProjectCreateInput {
+  category: CategoryCreateOneInlineInput
+  createdAt: DateTime
+  dateOfCreation: Date
+  detailUrlOverride: String
+  image: AssetCreateOneInlineInput
+  projectUrl: String
+  shortDescription: String
+  sourceControlUrl: String
+  title: String!
+  updatedAt: DateTime
+}
+
+input ProjectCreateManyInlineInput {
+  "Connect multiple existing Project documents"
+  connect: [ProjectWhereUniqueInput!]
+  "Create and connect multiple existing Project documents"
+  create: [ProjectCreateInput!]
+}
+
+input ProjectCreateOneInlineInput {
+  "Connect one existing Project document"
+  connect: ProjectWhereUniqueInput
+  "Create and connect one Project document"
+  create: ProjectCreateInput
+}
+
+"Identifies documents"
+input ProjectManyWhereInput {
+  "Logical AND on all given filters."
+  AND: [ProjectWhereInput!]
+  "Logical NOT on all given filters combined by AND."
+  NOT: [ProjectWhereInput!]
+  "Logical OR on all given filters."
+  OR: [ProjectWhereInput!]
+  "Contains search across all appropriate fields."
+  _search: String
+  category: CategoryWhereInput
+  createdAt: DateTime
+  "All values greater than the given value."
+  createdAt_gt: DateTime
+  "All values greater than or equal the given value."
+  createdAt_gte: DateTime
+  "All values that are contained in given list."
+  createdAt_in: [DateTime!]
+  "All values less than the given value."
+  createdAt_lt: DateTime
+  "All values less than or equal the given value."
+  createdAt_lte: DateTime
+  "All values that are not equal to given value."
+  createdAt_not: DateTime
+  "All values that are not contained in given list."
+  createdAt_not_in: [DateTime!]
+  dateOfCreation: Date
+  "All values greater than the given value."
+  dateOfCreation_gt: Date
+  "All values greater than or equal the given value."
+  dateOfCreation_gte: Date
+  "All values that are contained in given list."
+  dateOfCreation_in: [Date!]
+  "All values less than the given value."
+  dateOfCreation_lt: Date
+  "All values less than or equal the given value."
+  dateOfCreation_lte: Date
+  "All values that are not equal to given value."
+  dateOfCreation_not: Date
+  "All values that are not contained in given list."
+  dateOfCreation_not_in: [Date!]
+  detailUrlOverride: String
+  "All values containing the given string."
+  detailUrlOverride_contains: String
+  "All values ending with the given string."
+  detailUrlOverride_ends_with: String
+  "All values that are contained in given list."
+  detailUrlOverride_in: [String!]
+  "All values that are not equal to given value."
+  detailUrlOverride_not: String
+  "All values not containing the given string."
+  detailUrlOverride_not_contains: String
+  "All values not ending with the given string"
+  detailUrlOverride_not_ends_with: String
+  "All values that are not contained in given list."
+  detailUrlOverride_not_in: [String!]
+  "All values not starting with the given string."
+  detailUrlOverride_not_starts_with: String
+  "All values starting with the given string."
+  detailUrlOverride_starts_with: String
+  id: ID
+  "All values containing the given string."
+  id_contains: ID
+  "All values ending with the given string."
+  id_ends_with: ID
+  "All values that are contained in given list."
+  id_in: [ID!]
+  "All values that are not equal to given value."
+  id_not: ID
+  "All values not containing the given string."
+  id_not_contains: ID
+  "All values not ending with the given string"
+  id_not_ends_with: ID
+  "All values that are not contained in given list."
+  id_not_in: [ID!]
+  "All values not starting with the given string."
+  id_not_starts_with: ID
+  "All values starting with the given string."
+  id_starts_with: ID
+  image: AssetWhereInput
+  projectUrl: String
+  "All values containing the given string."
+  projectUrl_contains: String
+  "All values ending with the given string."
+  projectUrl_ends_with: String
+  "All values that are contained in given list."
+  projectUrl_in: [String!]
+  "All values that are not equal to given value."
+  projectUrl_not: String
+  "All values not containing the given string."
+  projectUrl_not_contains: String
+  "All values not ending with the given string"
+  projectUrl_not_ends_with: String
+  "All values that are not contained in given list."
+  projectUrl_not_in: [String!]
+  "All values not starting with the given string."
+  projectUrl_not_starts_with: String
+  "All values starting with the given string."
+  projectUrl_starts_with: String
+  publishedAt: DateTime
+  "All values greater than the given value."
+  publishedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  publishedAt_gte: DateTime
+  "All values that are contained in given list."
+  publishedAt_in: [DateTime!]
+  "All values less than the given value."
+  publishedAt_lt: DateTime
+  "All values less than or equal the given value."
+  publishedAt_lte: DateTime
+  "All values that are not equal to given value."
+  publishedAt_not: DateTime
+  "All values that are not contained in given list."
+  publishedAt_not_in: [DateTime!]
+  shortDescription: String
+  "All values containing the given string."
+  shortDescription_contains: String
+  "All values ending with the given string."
+  shortDescription_ends_with: String
+  "All values that are contained in given list."
+  shortDescription_in: [String!]
+  "All values that are not equal to given value."
+  shortDescription_not: String
+  "All values not containing the given string."
+  shortDescription_not_contains: String
+  "All values not ending with the given string"
+  shortDescription_not_ends_with: String
+  "All values that are not contained in given list."
+  shortDescription_not_in: [String!]
+  "All values not starting with the given string."
+  shortDescription_not_starts_with: String
+  "All values starting with the given string."
+  shortDescription_starts_with: String
+  sourceControlUrl: String
+  "All values containing the given string."
+  sourceControlUrl_contains: String
+  "All values ending with the given string."
+  sourceControlUrl_ends_with: String
+  "All values that are contained in given list."
+  sourceControlUrl_in: [String!]
+  "All values that are not equal to given value."
+  sourceControlUrl_not: String
+  "All values not containing the given string."
+  sourceControlUrl_not_contains: String
+  "All values not ending with the given string"
+  sourceControlUrl_not_ends_with: String
+  "All values that are not contained in given list."
+  sourceControlUrl_not_in: [String!]
+  "All values not starting with the given string."
+  sourceControlUrl_not_starts_with: String
+  "All values starting with the given string."
+  sourceControlUrl_starts_with: String
+  title: String
+  "All values containing the given string."
+  title_contains: String
+  "All values ending with the given string."
+  title_ends_with: String
+  "All values that are contained in given list."
+  title_in: [String!]
+  "All values that are not equal to given value."
+  title_not: String
+  "All values not containing the given string."
+  title_not_contains: String
+  "All values not ending with the given string"
+  title_not_ends_with: String
+  "All values that are not contained in given list."
+  title_not_in: [String!]
+  "All values not starting with the given string."
+  title_not_starts_with: String
+  "All values starting with the given string."
+  title_starts_with: String
+  updatedAt: DateTime
+  "All values greater than the given value."
+  updatedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  updatedAt_gte: DateTime
+  "All values that are contained in given list."
+  updatedAt_in: [DateTime!]
+  "All values less than the given value."
+  updatedAt_lt: DateTime
+  "All values less than or equal the given value."
+  updatedAt_lte: DateTime
+  "All values that are not equal to given value."
+  updatedAt_not: DateTime
+  "All values that are not contained in given list."
+  updatedAt_not_in: [DateTime!]
+}
+
+input ProjectUpdateInput {
+  category: CategoryUpdateOneInlineInput
+  dateOfCreation: Date
+  detailUrlOverride: String
+  image: AssetUpdateOneInlineInput
+  projectUrl: String
+  shortDescription: String
+  sourceControlUrl: String
+  title: String
+}
+
+input ProjectUpdateManyInlineInput {
+  "Connect multiple existing Project documents"
+  connect: [ProjectConnectInput!]
+  "Create and connect multiple Project documents"
+  create: [ProjectCreateInput!]
+  "Delete multiple Project documents"
+  delete: [ProjectWhereUniqueInput!]
+  "Disconnect multiple Project documents"
+  disconnect: [ProjectWhereUniqueInput!]
+  "Override currently-connected documents with multiple existing Project documents"
+  set: [ProjectWhereUniqueInput!]
+  "Update multiple Project documents"
+  update: [ProjectUpdateWithNestedWhereUniqueInput!]
+  "Upsert multiple Project documents"
+  upsert: [ProjectUpsertWithNestedWhereUniqueInput!]
+}
+
+input ProjectUpdateManyInput {
+  dateOfCreation: Date
+  detailUrlOverride: String
+  projectUrl: String
+  shortDescription: String
+  sourceControlUrl: String
+}
+
+input ProjectUpdateManyWithNestedWhereInput {
+  "Update many input"
+  data: ProjectUpdateManyInput!
+  "Document search"
+  where: ProjectWhereInput!
+}
+
+input ProjectUpdateOneInlineInput {
+  "Connect existing Project document"
+  connect: ProjectWhereUniqueInput
+  "Create and connect one Project document"
+  create: ProjectCreateInput
+  "Delete currently connected Project document"
+  delete: Boolean
+  "Disconnect currently connected Project document"
+  disconnect: Boolean
+  "Update single Project document"
+  update: ProjectUpdateWithNestedWhereUniqueInput
+  "Upsert single Project document"
+  upsert: ProjectUpsertWithNestedWhereUniqueInput
+}
+
+input ProjectUpdateWithNestedWhereUniqueInput {
+  "Document to update"
+  data: ProjectUpdateInput!
+  "Unique document search"
+  where: ProjectWhereUniqueInput!
+}
+
+input ProjectUpsertInput {
+  "Create document if it didn't exist"
+  create: ProjectCreateInput!
+  "Update document if it exists"
+  update: ProjectUpdateInput!
+}
+
+input ProjectUpsertWithNestedWhereUniqueInput {
+  "Upsert data"
+  data: ProjectUpsertInput!
+  "Unique document search"
+  where: ProjectWhereUniqueInput!
+}
+
+"Identifies documents"
+input ProjectWhereInput {
+  "Logical AND on all given filters."
+  AND: [ProjectWhereInput!]
+  "Logical NOT on all given filters combined by AND."
+  NOT: [ProjectWhereInput!]
+  "Logical OR on all given filters."
+  OR: [ProjectWhereInput!]
+  "Contains search across all appropriate fields."
+  _search: String
+  category: CategoryWhereInput
+  createdAt: DateTime
+  "All values greater than the given value."
+  createdAt_gt: DateTime
+  "All values greater than or equal the given value."
+  createdAt_gte: DateTime
+  "All values that are contained in given list."
+  createdAt_in: [DateTime!]
+  "All values less than the given value."
+  createdAt_lt: DateTime
+  "All values less than or equal the given value."
+  createdAt_lte: DateTime
+  "All values that are not equal to given value."
+  createdAt_not: DateTime
+  "All values that are not contained in given list."
+  createdAt_not_in: [DateTime!]
+  dateOfCreation: Date
+  "All values greater than the given value."
+  dateOfCreation_gt: Date
+  "All values greater than or equal the given value."
+  dateOfCreation_gte: Date
+  "All values that are contained in given list."
+  dateOfCreation_in: [Date!]
+  "All values less than the given value."
+  dateOfCreation_lt: Date
+  "All values less than or equal the given value."
+  dateOfCreation_lte: Date
+  "All values that are not equal to given value."
+  dateOfCreation_not: Date
+  "All values that are not contained in given list."
+  dateOfCreation_not_in: [Date!]
+  detailUrlOverride: String
+  "All values containing the given string."
+  detailUrlOverride_contains: String
+  "All values ending with the given string."
+  detailUrlOverride_ends_with: String
+  "All values that are contained in given list."
+  detailUrlOverride_in: [String!]
+  "All values that are not equal to given value."
+  detailUrlOverride_not: String
+  "All values not containing the given string."
+  detailUrlOverride_not_contains: String
+  "All values not ending with the given string"
+  detailUrlOverride_not_ends_with: String
+  "All values that are not contained in given list."
+  detailUrlOverride_not_in: [String!]
+  "All values not starting with the given string."
+  detailUrlOverride_not_starts_with: String
+  "All values starting with the given string."
+  detailUrlOverride_starts_with: String
+  id: ID
+  "All values containing the given string."
+  id_contains: ID
+  "All values ending with the given string."
+  id_ends_with: ID
+  "All values that are contained in given list."
+  id_in: [ID!]
+  "All values that are not equal to given value."
+  id_not: ID
+  "All values not containing the given string."
+  id_not_contains: ID
+  "All values not ending with the given string"
+  id_not_ends_with: ID
+  "All values that are not contained in given list."
+  id_not_in: [ID!]
+  "All values not starting with the given string."
+  id_not_starts_with: ID
+  "All values starting with the given string."
+  id_starts_with: ID
+  image: AssetWhereInput
+  projectUrl: String
+  "All values containing the given string."
+  projectUrl_contains: String
+  "All values ending with the given string."
+  projectUrl_ends_with: String
+  "All values that are contained in given list."
+  projectUrl_in: [String!]
+  "All values that are not equal to given value."
+  projectUrl_not: String
+  "All values not containing the given string."
+  projectUrl_not_contains: String
+  "All values not ending with the given string"
+  projectUrl_not_ends_with: String
+  "All values that are not contained in given list."
+  projectUrl_not_in: [String!]
+  "All values not starting with the given string."
+  projectUrl_not_starts_with: String
+  "All values starting with the given string."
+  projectUrl_starts_with: String
+  publishedAt: DateTime
+  "All values greater than the given value."
+  publishedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  publishedAt_gte: DateTime
+  "All values that are contained in given list."
+  publishedAt_in: [DateTime!]
+  "All values less than the given value."
+  publishedAt_lt: DateTime
+  "All values less than or equal the given value."
+  publishedAt_lte: DateTime
+  "All values that are not equal to given value."
+  publishedAt_not: DateTime
+  "All values that are not contained in given list."
+  publishedAt_not_in: [DateTime!]
+  shortDescription: String
+  "All values containing the given string."
+  shortDescription_contains: String
+  "All values ending with the given string."
+  shortDescription_ends_with: String
+  "All values that are contained in given list."
+  shortDescription_in: [String!]
+  "All values that are not equal to given value."
+  shortDescription_not: String
+  "All values not containing the given string."
+  shortDescription_not_contains: String
+  "All values not ending with the given string"
+  shortDescription_not_ends_with: String
+  "All values that are not contained in given list."
+  shortDescription_not_in: [String!]
+  "All values not starting with the given string."
+  shortDescription_not_starts_with: String
+  "All values starting with the given string."
+  shortDescription_starts_with: String
+  sourceControlUrl: String
+  "All values containing the given string."
+  sourceControlUrl_contains: String
+  "All values ending with the given string."
+  sourceControlUrl_ends_with: String
+  "All values that are contained in given list."
+  sourceControlUrl_in: [String!]
+  "All values that are not equal to given value."
+  sourceControlUrl_not: String
+  "All values not containing the given string."
+  sourceControlUrl_not_contains: String
+  "All values not ending with the given string"
+  sourceControlUrl_not_ends_with: String
+  "All values that are not contained in given list."
+  sourceControlUrl_not_in: [String!]
+  "All values not starting with the given string."
+  sourceControlUrl_not_starts_with: String
+  "All values starting with the given string."
+  sourceControlUrl_starts_with: String
+  title: String
+  "All values containing the given string."
+  title_contains: String
+  "All values ending with the given string."
+  title_ends_with: String
+  "All values that are contained in given list."
+  title_in: [String!]
+  "All values that are not equal to given value."
+  title_not: String
+  "All values not containing the given string."
+  title_not_contains: String
+  "All values not ending with the given string"
+  title_not_ends_with: String
+  "All values that are not contained in given list."
+  title_not_in: [String!]
+  "All values not starting with the given string."
+  title_not_starts_with: String
+  "All values starting with the given string."
+  title_starts_with: String
+  updatedAt: DateTime
+  "All values greater than the given value."
+  updatedAt_gt: DateTime
+  "All values greater than or equal the given value."
+  updatedAt_gte: DateTime
+  "All values that are contained in given list."
+  updatedAt_in: [DateTime!]
+  "All values less than the given value."
+  updatedAt_lt: DateTime
+  "All values less than or equal the given value."
+  updatedAt_lte: DateTime
+  "All values that are not equal to given value."
+  updatedAt_not: DateTime
+  "All values that are not contained in given list."
+  updatedAt_not_in: [DateTime!]
+}
+
+"References Project record uniquely"
+input ProjectWhereUniqueInput {
+  id: ID
+  title: String
+}
+
+input PublishLocaleInput {
+  "Locales to publish"
+  locale: Locale!
+  "Stages to publish selected locales to"
+  stages: [Stage!]!
+}
+
+"Input type representing a RGBA color value: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()_and_rgba()"
+input RGBAInput {
+  a: RGBATransparency!
+  b: RGBAHue!
+  g: RGBAHue!
+  r: RGBAHue!
+}
+
+input UnpublishLocaleInput {
+  "Locales to unpublish"
+  locale: Locale!
+  "Stages to unpublish selected locales from"
+  stages: [Stage!]!
+}
+
+input VersionWhereInput {
+  id: ID!
+  revision: Int!
+  stage: Stage!
+}
+
+
+"Slate-compatible RichText AST"
+scalar RichTextAST
+
+scalar RGBAHue
+
+"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar."
+scalar DateTime
+
+"Raw JSON value"
+scalar Json
+
+scalar Hex
+
+"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long
+
+"A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar."
+scalar Date
+
+scalar RGBATransparency
