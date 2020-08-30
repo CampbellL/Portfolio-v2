@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {Scroll} from "@angular/router";
 
 @Component({
@@ -8,7 +8,7 @@ import {Scroll} from "@angular/router";
 })
 export class NavigationComponent implements OnInit {
   public mobileNavIsActive = false;
-  public navBackGround = false;
+  @Input() public navBackGround;
   constructor() { }
 
   ngOnInit(): void {

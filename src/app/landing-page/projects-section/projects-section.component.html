@@ -1,0 +1,20 @@
+<div class="container">
+  <h2>Latest Projects</h2>
+  <ul>
+    <li [ngClass]="{'active': activeActiveCategoryFilter === ''}"  (click)="resetFilter()">Recent</li>
+    <li *ngFor="let category of categories$ | async"
+        (click)="applyFilter(category.id)"
+        [ngClass]="{'active': activeActiveCategoryFilter === category.id}">
+      {{category.title}}
+    </li>
+  </ul>
+  <section>
+    <div class="projects">
+      <app-project *ngFor="let project of projects$ | async" [project]="project"></app-project>
+    </div>
+    <div class="footer">
+      <button>See all Projects</button>
+    </div>
+  </section>
+</div>
+

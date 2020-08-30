@@ -1,3 +1,6 @@
+import {fireBase} from "./environment.private";
+
 export const environment = {
-  production: true
+  production: true,
+  firebase: fireBase
 };

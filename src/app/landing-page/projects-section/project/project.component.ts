@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Project} from "../../gql/types";
+import {Project} from "../../../gql/types";
 
 @Component({
   selector: 'app-project',

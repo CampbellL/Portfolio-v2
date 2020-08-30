@@ -7,19 +7,19 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Slate-compatible RichText AST */
-  RichTextAST: any;
-  RGBAHue: any;
+  RGBATransparency: any;
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar. */
   DateTime: any;
-  /** Raw JSON value */
-  Json: any;
-  Hex: any;
-  /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
-  Long: any;
   /** A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar. */
   Date: any;
-  RGBATransparency: any;
+  RGBAHue: any;
+  Hex: any;
+  /** Slate-compatible RichText AST */
+  RichTextAST: any;
+  /** Raw JSON value */
+  Json: any;
+  /** The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: any;
 };
 
 /** An object with an ID */
@@ -58,6 +58,7 @@ export type Asset = Node & {
   localizations: Array<Asset>;
   /** The mime type of the file */
   mimeType?: Maybe<Scalars['String']>;
+  projectAssets: Array<Project>;
   projectImage: Array<Project>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
@@ -100,6 +101,18 @@ export type AssetHistoryArgs = {
 export type AssetLocalizationsArgs = {
   includeCurrent?: Scalars['Boolean'];
   locales?: Array<Locale>;
+};
+
+
+/** Asset system model */
+export type AssetProjectAssetsArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<ProjectOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<ProjectWhereInput>;
 };
 
 
@@ -167,7 +180,7 @@ export type Category = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
-  projects: Array<Project>;
+  project: Array<Project>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** System stage field */
@@ -192,7 +205,7 @@ export type CategoryHistoryArgs = {
 };
 
 
-export type CategoryProjectsArgs = {
+export type CategoryProjectArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -714,18 +727,21 @@ export type PageInfo = {
 
 export type Project = Node & {
   __typename?: 'Project';
-  category?: Maybe<Category>;
+  assets: Array<Asset>;
+  category: Array<Category>;
   /** The time the document was created */
   createdAt: Scalars['DateTime'];
   dateOfCreation?: Maybe<Scalars['Date']>;
   detailUrlOverride?: Maybe<Scalars['String']>;
   /** Get the document in other stages */
   documentInStages: Array<Project>;
+  footerContent?: Maybe<RichText>;
   /** List of Project versions */
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
   image?: Maybe<Asset>;
+  longDescription?: Maybe<RichText>;
   projectUrl?: Maybe<Scalars['String']>;
   /** The time the document was published. Null on documents in draft stage. */
   publishedAt?: Maybe<Scalars['DateTime']>;
@@ -736,6 +752,29 @@ export type Project = Node & {
   title: Scalars['String'];
   /** The time the document was updated */
   updatedAt: Scalars['DateTime'];
+  youtubeEmbedLink?: Maybe<Scalars['String']>;
+};
+
+
+export type ProjectAssetsArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<AssetOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<AssetWhereInput>;
+};
+
+
+export type ProjectCategoryArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<CategoryOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<CategoryWhereInput>;
 };
 
 
@@ -1038,7 +1077,9 @@ export enum ProjectOrderByInput {
   TitleAsc = 'title_ASC',
   TitleDesc = 'title_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC'
+  UpdatedAtDesc = 'updatedAt_DESC',
+  YoutubeEmbedLinkAsc = 'youtubeEmbedLink_ASC',
+  YoutubeEmbedLinkDesc = 'youtubeEmbedLink_DESC'
 }
 
 /** Stage system enumeration */
@@ -1146,6 +1187,7 @@ export type AssetCreateInput = {
   /** Inline mutations for managing document localizations excluding the default locale */
   localizations?: Maybe<AssetCreateLocalizationsInput>;
   mimeType?: Maybe<Scalars['String']>;
+  projectAssets?: Maybe<ProjectCreateManyInlineInput>;
   projectImage?: Maybe<ProjectCreateManyInlineInput>;
   size?: Maybe<Scalars['Float']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1232,6 +1274,9 @@ export type AssetManyWhereInput = {
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: Maybe<Scalars['ID']>;
+  projectAssets_every?: Maybe<ProjectWhereInput>;
+  projectAssets_none?: Maybe<ProjectWhereInput>;
+  projectAssets_some?: Maybe<ProjectWhereInput>;
   projectImage_every?: Maybe<ProjectWhereInput>;
   projectImage_none?: Maybe<ProjectWhereInput>;
   projectImage_some?: Maybe<ProjectWhereInput>;
@@ -1282,6 +1327,7 @@ export type AssetUpdateInput = {
   /** Manage document localizations */
   localizations?: Maybe<AssetUpdateLocalizationsInput>;
   mimeType?: Maybe<Scalars['String']>;
+  projectAssets?: Maybe<ProjectUpdateManyInlineInput>;
   projectImage?: Maybe<ProjectUpdateManyInlineInput>;
   size?: Maybe<Scalars['Float']>;
   width?: Maybe<Scalars['Float']>;
@@ -1521,6 +1567,9 @@ export type AssetWhereInput = {
   mimeType_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
   mimeType_starts_with?: Maybe<Scalars['String']>;
+  projectAssets_every?: Maybe<ProjectWhereInput>;
+  projectAssets_none?: Maybe<ProjectWhereInput>;
+  projectAssets_some?: Maybe<ProjectWhereInput>;
   projectImage_every?: Maybe<ProjectWhereInput>;
   projectImage_none?: Maybe<ProjectWhereInput>;
   projectImage_some?: Maybe<ProjectWhereInput>;
@@ -1600,7 +1649,7 @@ export type CategoryConnectInput = {
 
 export type CategoryCreateInput = {
   createdAt?: Maybe<Scalars['DateTime']>;
-  projects?: Maybe<ProjectCreateManyInlineInput>;
+  project?: Maybe<ProjectCreateManyInlineInput>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -1663,9 +1712,9 @@ export type CategoryManyWhereInput = {
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: Maybe<Scalars['ID']>;
-  projects_every?: Maybe<ProjectWhereInput>;
-  projects_none?: Maybe<ProjectWhereInput>;
-  projects_some?: Maybe<ProjectWhereInput>;
+  project_every?: Maybe<ProjectWhereInput>;
+  project_none?: Maybe<ProjectWhereInput>;
+  project_some?: Maybe<ProjectWhereInput>;
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: Maybe<Scalars['DateTime']>;
@@ -1718,7 +1767,7 @@ export type CategoryManyWhereInput = {
 };
 
 export type CategoryUpdateInput = {
-  projects?: Maybe<ProjectUpdateManyInlineInput>;
+  project?: Maybe<ProjectUpdateManyInlineInput>;
   title?: Maybe<Scalars['String']>;
 };
 
@@ -1831,9 +1880,9 @@ export type CategoryWhereInput = {
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: Maybe<Scalars['ID']>;
-  projects_every?: Maybe<ProjectWhereInput>;
-  projects_none?: Maybe<ProjectWhereInput>;
-  projects_some?: Maybe<ProjectWhereInput>;
+  project_every?: Maybe<ProjectWhereInput>;
+  project_none?: Maybe<ProjectWhereInput>;
+  project_some?: Maybe<ProjectWhereInput>;
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   publishedAt_gt?: Maybe<Scalars['DateTime']>;
@@ -1973,16 +2022,20 @@ export type ProjectConnectInput = {
 };
 
 export type ProjectCreateInput = {
-  category?: Maybe<CategoryCreateOneInlineInput>;
+  assets?: Maybe<AssetCreateManyInlineInput>;
+  category?: Maybe<CategoryCreateManyInlineInput>;
   createdAt?: Maybe<Scalars['DateTime']>;
   dateOfCreation?: Maybe<Scalars['Date']>;
   detailUrlOverride?: Maybe<Scalars['String']>;
+  footerContent?: Maybe<Scalars['RichTextAST']>;
   image?: Maybe<AssetCreateOneInlineInput>;
+  longDescription?: Maybe<Scalars['RichTextAST']>;
   projectUrl?: Maybe<Scalars['String']>;
   shortDescription?: Maybe<Scalars['String']>;
   sourceControlUrl?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['DateTime']>;
+  youtubeEmbedLink?: Maybe<Scalars['String']>;
 };
 
 export type ProjectCreateManyInlineInput = {
@@ -2009,7 +2062,12 @@ export type ProjectManyWhereInput = {
   OR?: Maybe<Array<ProjectWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: Maybe<Scalars['String']>;
-  category?: Maybe<CategoryWhereInput>;
+  assets_every?: Maybe<AssetWhereInput>;
+  assets_none?: Maybe<AssetWhereInput>;
+  assets_some?: Maybe<AssetWhereInput>;
+  category_every?: Maybe<CategoryWhereInput>;
+  category_none?: Maybe<CategoryWhereInput>;
+  category_some?: Maybe<CategoryWhereInput>;
   createdAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>;
@@ -2185,17 +2243,40 @@ export type ProjectManyWhereInput = {
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
   updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  youtubeEmbedLink?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  youtubeEmbedLink_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  youtubeEmbedLink_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  youtubeEmbedLink_in?: Maybe<Array<Scalars['String']>>;
+  /** All values that are not equal to given value. */
+  youtubeEmbedLink_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  youtubeEmbedLink_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  youtubeEmbedLink_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  youtubeEmbedLink_not_in?: Maybe<Array<Scalars['String']>>;
+  /** All values not starting with the given string. */
+  youtubeEmbedLink_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  youtubeEmbedLink_starts_with?: Maybe<Scalars['String']>;
 };
 
 export type ProjectUpdateInput = {
-  category?: Maybe<CategoryUpdateOneInlineInput>;
+  assets?: Maybe<AssetUpdateManyInlineInput>;
+  category?: Maybe<CategoryUpdateManyInlineInput>;
   dateOfCreation?: Maybe<Scalars['Date']>;
   detailUrlOverride?: Maybe<Scalars['String']>;
+  footerContent?: Maybe<Scalars['RichTextAST']>;
   image?: Maybe<AssetUpdateOneInlineInput>;
+  longDescription?: Maybe<Scalars['RichTextAST']>;
   projectUrl?: Maybe<Scalars['String']>;
   shortDescription?: Maybe<Scalars['String']>;
   sourceControlUrl?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
+  youtubeEmbedLink?: Maybe<Scalars['String']>;
 };
 
 export type ProjectUpdateManyInlineInput = {
@@ -2218,9 +2299,12 @@ export type ProjectUpdateManyInlineInput = {
 export type ProjectUpdateManyInput = {
   dateOfCreation?: Maybe<Scalars['Date']>;
   detailUrlOverride?: Maybe<Scalars['String']>;
+  footerContent?: Maybe<Scalars['RichTextAST']>;
+  longDescription?: Maybe<Scalars['RichTextAST']>;
   projectUrl?: Maybe<Scalars['String']>;
   shortDescription?: Maybe<Scalars['String']>;
   sourceControlUrl?: Maybe<Scalars['String']>;
+  youtubeEmbedLink?: Maybe<Scalars['String']>;
 };
 
 export type ProjectUpdateManyWithNestedWhereInput = {
@@ -2276,7 +2360,12 @@ export type ProjectWhereInput = {
   OR?: Maybe<Array<ProjectWhereInput>>;
   /** Contains search across all appropriate fields. */
   _search?: Maybe<Scalars['String']>;
-  category?: Maybe<CategoryWhereInput>;
+  assets_every?: Maybe<AssetWhereInput>;
+  assets_none?: Maybe<AssetWhereInput>;
+  assets_some?: Maybe<AssetWhereInput>;
+  category_every?: Maybe<CategoryWhereInput>;
+  category_none?: Maybe<CategoryWhereInput>;
+  category_some?: Maybe<CategoryWhereInput>;
   createdAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   createdAt_gt?: Maybe<Scalars['DateTime']>;
@@ -2452,6 +2541,25 @@ export type ProjectWhereInput = {
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
   updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  youtubeEmbedLink?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  youtubeEmbedLink_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  youtubeEmbedLink_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  youtubeEmbedLink_in?: Maybe<Array<Scalars['String']>>;
+  /** All values that are not equal to given value. */
+  youtubeEmbedLink_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  youtubeEmbedLink_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  youtubeEmbedLink_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  youtubeEmbedLink_not_in?: Maybe<Array<Scalars['String']>>;
+  /** All values not starting with the given string. */
+  youtubeEmbedLink_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  youtubeEmbedLink_starts_with?: Maybe<Scalars['String']>;
 };
 
 /** References Project record uniquely */

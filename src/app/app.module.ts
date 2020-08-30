@@ -1,18 +1,23 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {AppComponent} from "./app.component";
+import {HomeSectionComponent} from "./landing-page/home-section/home-section.component";
+import {NavigationComponent} from "./shared/navigation/navigation.component";
+import {CareerSectionComponent} from "./landing-page/career-section/career-section.component";
+import {SkillsSectionComponent} from "./landing-page/skills-section/skills-section.component";
+import {ProjectsSectionComponent} from "./landing-page/projects-section/projects-section.component";
+import {ProjectComponent} from "./landing-page/projects-section/project/project.component";
+import {ContactSectionComponent} from "./landing-page/contact-section/contact-section.component";
+import {ProjectDetailComponent} from "./project-detail/project-detail.component";
+import {LandingPageComponent} from "./landing-page/landing-page.component";
+import {BrowserModule} from "@angular/platform-browser";
+import {AppRoutingModule} from "./app-routing.module";
+import {ScullyLibModule} from "@scullyio/ng-lib";
+import {GraphQLModule} from "./graphql.module";
+import {HttpClientModule} from "@angular/common/http";
+import {AngularFireModule} from "@angular/fire";
+import {AngularFireAnalyticsModule} from "@angular/fire/analytics";
+import {environment} from "../environments/environment";
+import {NgModule} from "@angular/core";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomeSectionComponent } from './home-section/home-section.component';
-import { NavigationComponent } from './shared/navigation/navigation.component';
-import { CareerSectionComponent } from './career-section/career-section.component';
-import { SkillsSectionComponent } from './skills-section/skills-section.component';
-import { ProjectsSectionComponent } from './projects-section/projects-section.component';
-import { ScullyLibModule } from '@scullyio/ng-lib';
-import { ProjectComponent } from './projects-section/project/project.component';
-import { GraphQLModule } from './graphql.module';
-import { HttpClientModule } from '@angular/common/http';
-import { ContactSectionComponent } from './contact-section/contact-section.component';
 
 @NgModule({
   declarations: [
@@ -23,14 +28,18 @@ import { ContactSectionComponent } from './contact-section/contact-section.compo
     SkillsSectionComponent,
     ProjectsSectionComponent,
     ProjectComponent,
-    ContactSectionComponent
+    ContactSectionComponent,
+    ProjectDetailComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ScullyLibModule,
     GraphQLModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAnalyticsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

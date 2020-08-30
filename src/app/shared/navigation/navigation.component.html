@@ -1,35 +1,37 @@
-<nav [ngClass]="{'active':navBackGround}">
-  <button class="hamburger hamburger--spring" [ngClass]="{'is-active': mobileNavIsActive}" type="button"
-          (click)="toggleMobileNavigation()">
+<nav [ngClass]="{'active':navBackGround}" class="container">
+  <div class="container">
+    <button class="hamburger hamburger--spring" [ngClass]="{'is-active': mobileNavIsActive}" type="button"
+            (click)="toggleMobileNavigation()">
   <span class="hamburger-box">
     <span class="hamburger-inner"></span>
   </span>
-  </button>
-  <ul [ngClass]="{'mobile-active': mobileNavIsActive}">
-    <li>
-      <a href="#">Home</a>
-    </li>
-    <li>
-      <a href="#projects">
-        Projects
-      </a>
-    </li>
-    <li>
-      <a href="#skills">
-        Skills
-      </a>
-    </li>
-    <li>
-      <a href="#career">
-        Career & Education
-      </a>
-    </li>
-    <li>
-      <a href="#contact">
-        Contact
-      </a>
-    </li>
-  </ul>
+    </button>
+    <ul [ngClass]="{'mobile-active': mobileNavIsActive}">
+      <li>
+        <a href="#">Home</a>
+      </li>
+      <li>
+        <a href="#projects">
+          Projects
+        </a>
+      </li>
+      <li>
+        <a href="#skills">
+          Skills
+        </a>
+      </li>
+      <li>
+        <a href="#career">
+          Career & Education
+        </a>
+      </li>
+      <li>
+        <a href="#contact">
+          Contact
+        </a>
+      </li>
+    </ul>
+  </div>
 </nav>
 <div class="linkedIn">
   <a href="https://www.linkedin.com/in/earl-campbell/">

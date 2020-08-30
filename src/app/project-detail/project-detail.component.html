@@ -1,0 +1,40 @@
+<app-navigation [navBackGround]="true"></app-navigation>
+<section>
+  <div class="container">
+    <article *ngIf="project">
+      <div class="left">
+        <iframe *ngIf="project.youtubeEmbedLink" [src]="safeVideoUrl" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        <div *ngIf="!project.youtubeEmbedLink" [style.backgroundImage]="'url('+ project.assets[2]?.url +')'">
+
+        </div>
+        <div class="images">
+          <div [style.backgroundImage]="'url('+ project.assets[0]?.url +')'" ></div>
+          <div [style.backgroundImage]="'url('+ project.assets[1]?.url +')'" ></div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="body">
+          <div class="header">
+            <div class="headings">
+              <h2>{{ project.title}}</h2>
+              <h3>{{ project.shortDescription}}</h3>
+              <span class="line"></span>
+            </div>
+            <div class="buttons">
+              <a target="_blank" *ngIf="project.sourceControlUrl" [href]="project.sourceControlUrl">Show Code</a>
+              <a target="_blank" *ngIf="project.projectUrl" [href]="project.projectUrl">Try Now</a>
+            </div>
+          </div>
+          <span class="line"></span>
+          <div class="content" [innerHTML]="project.longDescription?.html">
+
+          </div>
+        </div>
+        <div class="footer" [innerHTML]="project.footerContent?.html">
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

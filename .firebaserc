@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "portfolio-5f29c"
+  },
+  "targets": {
+    "portfolio-5f29c": {
+      "hosting": {
+        "Portfolio": [
+          "portfolio-5f29c"
+        ]
+      }
+    }
   }
 }

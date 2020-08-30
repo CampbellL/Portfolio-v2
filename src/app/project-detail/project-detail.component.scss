@@ -1,0 +1,140 @@
+:host {
+  height: 100vh;
+  width: 100%;
+  background-color: #141D47;
+  color: white;
+  display: flex;
+
+  section {
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+    .container {
+      article {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        div {
+          height: 65%;
+        }
+
+        .right {
+          width: 59%;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          .body {
+            height: 75%;
+            text-align: justify;
+
+            .header {
+              height: 12%;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+
+              .headings {
+                span.line {
+                  border: 1px solid white;
+                  height: 1px;
+                  display: block;
+                  width: 2rem;
+                  margin-bottom: 1rem;
+                }
+
+                h2 {
+                  font-weight: bold;
+                  font-size: 20px;
+                }
+
+                h3 {
+                  font-size: 20px;
+                  margin-bottom: .5rem;
+                }
+              }
+
+              .buttons {
+                a {
+                  text-decoration: none;
+                  margin-left: 1rem;
+                  box-sizing: content-box;
+                  color: white;
+                  border: 1px solid white;
+                  margin-top: 10px;
+                  padding: 10px 20px;
+                  background: transparent;
+                  border-radius: 5px;
+                  opacity: 1;
+                  transition: all ease-in-out 100ms;
+
+                  &:hover {
+                    background-color: #7217E2;
+                    border: #7217E2 1px solid;
+                    color: white;
+                  }
+                }
+              }
+            }
+            .content{
+              padding-right: 1rem;
+              overflow-y: auto;
+            }
+
+          }
+
+          .footer {
+            height: 20%;
+            a {
+              &:link{
+                color: #64c5e2 !important;
+
+              }
+              text-decoration: none;
+            }
+          }
+        }
+
+        .left {
+          width: 35%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          iframe, div {
+            width: 100%;
+            height: 60%;
+            background-size: cover;
+            background-repeat: no-repeat;
+          }
+
+          .images {
+            display: flex;
+            justify-content: space-between;
+
+            width: 100%;
+            height: 39%;
+
+            div {
+              width: 49%;
+              height: 100%;
+              background-size: cover;
+              background-repeat: no-repeat;
+              background-image: url("/assets/herobg.png");
+            }
+          }
+        }
+
+
+      }
+    }
+
+
+  }
+}

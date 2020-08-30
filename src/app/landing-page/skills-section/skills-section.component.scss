@@ -1,34 +1,41 @@
-@import "../../colors";
+@import "../../../colors";
 
 :host {
   height: calc(100vh - 80px);
+  @media screen and (max-width: 768px) {
+    height: calc(300vh);
+  }
   width: 100%;
   display: block;
   background-color: #141D47;
   padding-top: 100px;
-  padding-left: 100px;
-  padding-right: 100px;
-  section{
-    height: 100%;
-    transform: translateY(-100px);
+  section {
+    height: 95%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    article{
+    @media screen and (max-width: 1024px) {
+      flex-direction: column;
+    }
+
+    article {
+
       box-shadow: 0 3px 6px #00000029;
       border-radius: 10px;
-      width: 30%;
+      width: 32%;
       height: 70%;
       background-color: white;
       padding: 3rem;
       color: #603C8C;
-      h3{
+
+      h3 {
         color: #603C8C;
         font-weight: bold;
         text-align: center;
         font-size: 23px;
       }
-      div{
+
+      div {
         padding-top: 10%;
         height: calc(90% - 3rem);
         width: 100%;
@@ -37,10 +44,16 @@
         justify-content: space-between;
         align-items: center;
         text-align: center;
-        h4{
+
+        h4 {
           font-size: 16px;
           font-weight: bold;
         }
+      }
+
+      @media screen and (max-width: 1024px) {
+        width: 100%;
+        height: 31%;
       }
     }
   }

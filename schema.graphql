@@ -59,6 +59,7 @@ type Asset implements Node {
   ): [Asset!]!
   "The mime type of the file"
   mimeType: String
+  projectAssets(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, where: ProjectWhereInput): [Project!]!
   projectImage(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, where: ProjectWhereInput): [Project!]!
   "The time the document was published. Null on documents in draft stage."
   publishedAt(
@@ -123,7 +124,7 @@ type Category implements Node {
   ): [Version!]!
   "The unique identifier"
   id: ID!
-  projects(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, where: ProjectWhereInput): [Project!]!
+  project(after: String, before: String, first: Int, last: Int, orderBy: ProjectOrderByInput, skip: Int, where: ProjectWhereInput): [Project!]!
   "The time the document was published. Null on documents in draft stage."
   publishedAt: DateTime
   "System stage field"
@@ -517,7 +518,8 @@ type PageInfo {
 }
 
 type Project implements Node {
-  category: Category
+  assets(after: String, before: String, first: Int, last: Int, orderBy: AssetOrderByInput, skip: Int, where: AssetWhereInput): [Asset!]!
+  category(after: String, before: String, first: Int, last: Int, orderBy: CategoryOrderByInput, skip: Int, where: CategoryWhereInput): [Category!]!
   "The time the document was created"
   createdAt: DateTime!
   dateOfCreation: Date
@@ -531,6 +533,7 @@ type Project implements Node {
     "Potential stages that should be returned"
     stages: [Stage!]! = [PUBLISHED, DRAFT]
   ): [Project!]!
+  footerContent: RichText
   "List of Project versions"
   history(
     limit: Int! = 10,
@@ -541,6 +544,7 @@ type Project implements Node {
   "The unique identifier"
   id: ID!
   image: Asset
+  longDescription: RichText
   projectUrl: String
   "The time the document was published. Null on documents in draft stage."
   publishedAt: DateTime
@@ -551,6 +555,7 @@ type Project implements Node {
   title: String!
   "The time the document was updated"
   updatedAt: DateTime!
+  youtubeEmbedLink: String
 }
 
 "A connection to a list of items."
@@ -752,6 +757,8 @@ enum ProjectOrderByInput {
   title_DESC
   updatedAt_ASC
   updatedAt_DESC
+  youtubeEmbedLink_ASC
+  youtubeEmbedLink_DESC
 }
 
 "Stage system enumeration"
@@ -859,6 +866,7 @@ input AssetCreateInput {
   "Inline mutations for managing document localizations excluding the default locale"
   localizations: AssetCreateLocalizationsInput
   mimeType: String
+  projectAssets: ProjectCreateManyInlineInput
   projectImage: ProjectCreateManyInlineInput
   size: Float
   updatedAt: DateTime
@@ -945,6 +953,9 @@ input AssetManyWhereInput {
   id_not_starts_with: ID
   "All values starting with the given string."
   id_starts_with: ID
+  projectAssets_every: ProjectWhereInput
+  projectAssets_none: ProjectWhereInput
+  projectAssets_some: ProjectWhereInput
   projectImage_every: ProjectWhereInput
   projectImage_none: ProjectWhereInput
   projectImage_some: ProjectWhereInput
@@ -995,6 +1006,7 @@ input AssetUpdateInput {
   "Manage document localizations"
   localizations: AssetUpdateLocalizationsInput
   mimeType: String
+  projectAssets: ProjectUpdateManyInlineInput
   projectImage: ProjectUpdateManyInlineInput
   size: Float
   width: Float
@@ -1234,6 +1246,9 @@ input AssetWhereInput {
   mimeType_not_starts_with: String
   "All values starting with the given string."
   mimeType_starts_with: String
+  projectAssets_every: ProjectWhereInput
+  projectAssets_none: ProjectWhereInput
+  projectAssets_some: ProjectWhereInput
   projectImage_every: ProjectWhereInput
   projectImage_none: ProjectWhereInput
   projectImage_some: ProjectWhereInput
@@ -1313,7 +1328,7 @@ input CategoryConnectInput {
 
 input CategoryCreateInput {
   createdAt: DateTime
-  projects: ProjectCreateManyInlineInput
+  project: ProjectCreateManyInlineInput
   title: String!
   updatedAt: DateTime
 }
@@ -1376,9 +1391,9 @@ input CategoryManyWhereInput {
   id_not_starts_with: ID
   "All values starting with the given string."
   id_starts_with: ID
-  projects_every: ProjectWhereInput
-  projects_none: ProjectWhereInput
-  projects_some: ProjectWhereInput
+  project_every: ProjectWhereInput
+  project_none: ProjectWhereInput
+  project_some: ProjectWhereInput
   publishedAt: DateTime
   "All values greater than the given value."
   publishedAt_gt: DateTime
@@ -1431,7 +1446,7 @@ input CategoryManyWhereInput {
 }
 
 input CategoryUpdateInput {
-  projects: ProjectUpdateManyInlineInput
+  project: ProjectUpdateManyInlineInput
   title: String
 }
 
@@ -1544,9 +1559,9 @@ input CategoryWhereInput {
   id_not_starts_with: ID
   "All values starting with the given string."
   id_starts_with: ID
-  projects_every: ProjectWhereInput
-  projects_none: ProjectWhereInput
-  projects_some: ProjectWhereInput
+  project_every: ProjectWhereInput
+  project_none: ProjectWhereInput
+  project_some: ProjectWhereInput
   publishedAt: DateTime
   "All values greater than the given value."
   publishedAt_gt: DateTime
@@ -1687,16 +1702,20 @@ input ProjectConnectInput {
 }
 
 input ProjectCreateInput {
-  category: CategoryCreateOneInlineInput
+  assets: AssetCreateManyInlineInput
+  category: CategoryCreateManyInlineInput
   createdAt: DateTime
   dateOfCreation: Date
   detailUrlOverride: String
+  footerContent: RichTextAST
   image: AssetCreateOneInlineInput
+  longDescription: RichTextAST
   projectUrl: String
   shortDescription: String
   sourceControlUrl: String
   title: String!
   updatedAt: DateTime
+  youtubeEmbedLink: String
 }
 
 input ProjectCreateManyInlineInput {
@@ -1723,7 +1742,12 @@ input ProjectManyWhereInput {
   OR: [ProjectWhereInput!]
   "Contains search across all appropriate fields."
   _search: String
-  category: CategoryWhereInput
+  assets_every: AssetWhereInput
+  assets_none: AssetWhereInput
+  assets_some: AssetWhereInput
+  category_every: CategoryWhereInput
+  category_none: CategoryWhereInput
+  category_some: CategoryWhereInput
   createdAt: DateTime
   "All values greater than the given value."
   createdAt_gt: DateTime
@@ -1899,17 +1923,40 @@ input ProjectManyWhereInput {
   updatedAt_not: DateTime
   "All values that are not contained in given list."
   updatedAt_not_in: [DateTime!]
+  youtubeEmbedLink: String
+  "All values containing the given string."
+  youtubeEmbedLink_contains: String
+  "All values ending with the given string."
+  youtubeEmbedLink_ends_with: String
+  "All values that are contained in given list."
+  youtubeEmbedLink_in: [String!]
+  "All values that are not equal to given value."
+  youtubeEmbedLink_not: String
+  "All values not containing the given string."
+  youtubeEmbedLink_not_contains: String
+  "All values not ending with the given string"
+  youtubeEmbedLink_not_ends_with: String
+  "All values that are not contained in given list."
+  youtubeEmbedLink_not_in: [String!]
+  "All values not starting with the given string."
+  youtubeEmbedLink_not_starts_with: String
+  "All values starting with the given string."
+  youtubeEmbedLink_starts_with: String
 }
 
 input ProjectUpdateInput {
-  category: CategoryUpdateOneInlineInput
+  assets: AssetUpdateManyInlineInput
+  category: CategoryUpdateManyInlineInput
   dateOfCreation: Date
   detailUrlOverride: String
+  footerContent: RichTextAST
   image: AssetUpdateOneInlineInput
+  longDescription: RichTextAST
   projectUrl: String
   shortDescription: String
   sourceControlUrl: String
   title: String
+  youtubeEmbedLink: String
 }
 
 input ProjectUpdateManyInlineInput {
@@ -1932,9 +1979,12 @@ input ProjectUpdateManyInlineInput {
 input ProjectUpdateManyInput {
   dateOfCreation: Date
   detailUrlOverride: String
+  footerContent: RichTextAST
+  longDescription: RichTextAST
   projectUrl: String
   shortDescription: String
   sourceControlUrl: String
+  youtubeEmbedLink: String
 }
 
 input ProjectUpdateManyWithNestedWhereInput {
@@ -1990,7 +2040,12 @@ input ProjectWhereInput {
   OR: [ProjectWhereInput!]
   "Contains search across all appropriate fields."
   _search: String
-  category: CategoryWhereInput
+  assets_every: AssetWhereInput
+  assets_none: AssetWhereInput
+  assets_some: AssetWhereInput
+  category_every: CategoryWhereInput
+  category_none: CategoryWhereInput
+  category_some: CategoryWhereInput
   createdAt: DateTime
   "All values greater than the given value."
   createdAt_gt: DateTime
@@ -2166,6 +2221,25 @@ input ProjectWhereInput {
   updatedAt_not: DateTime
   "All values that are not contained in given list."
   updatedAt_not_in: [DateTime!]
+  youtubeEmbedLink: String
+  "All values containing the given string."
+  youtubeEmbedLink_contains: String
+  "All values ending with the given string."
+  youtubeEmbedLink_ends_with: String
+  "All values that are contained in given list."
+  youtubeEmbedLink_in: [String!]
+  "All values that are not equal to given value."
+  youtubeEmbedLink_not: String
+  "All values not containing the given string."
+  youtubeEmbedLink_not_contains: String
+  "All values not ending with the given string"
+  youtubeEmbedLink_not_ends_with: String
+  "All values that are not contained in given list."
+  youtubeEmbedLink_not_in: [String!]
+  "All values not starting with the given string."
+  youtubeEmbedLink_not_starts_with: String
+  "All values starting with the given string."
+  youtubeEmbedLink_starts_with: String
 }
 
 "References Project record uniquely"
@@ -2203,23 +2277,23 @@ input VersionWhereInput {
 }
 
 
-"Slate-compatible RichText AST"
-scalar RichTextAST
-
-scalar RGBAHue
+scalar RGBATransparency
 
 "A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the date-timeformat outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representationof dates and times using the Gregorian calendar."
 scalar DateTime
 
-"Raw JSON value"
-scalar Json
-
-scalar Hex
-
-"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
-scalar Long
-
 "A date string, such as 2007-12-03 (YYYY-MM-DD), compliant with ISO 8601 standard for representation of dates using the Gregorian calendar."
 scalar Date
 
-scalar RGBATransparency
+scalar RGBAHue
+
+scalar Hex
+
+"Slate-compatible RichText AST"
+scalar RichTextAST
+
+"Raw JSON value"
+scalar Json
+
+"The Long scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1."
+scalar Long

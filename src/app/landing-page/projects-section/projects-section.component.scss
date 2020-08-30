@@ -1,13 +1,14 @@
-@import '../../colors';
+@import '../../../colors';
 
 :host {
   display: block;
   height: calc(100vh - 80px);
+  @media screen and (max-width: 768px){
+    height: calc(300vh - 80px);
+  }
   width: 100%;
   background-color: $darkPurpleBg;
   padding-top: 100px;
-  padding-left: 100px;
-  padding-right: 100px;
   ul{
     list-style: none;
     display: flex;
@@ -44,8 +45,12 @@
     div.projects {
       pointer-events: none;
       height: 85%;
-      justify-content: space-between;
+      align-items: flex-start;
+      justify-content: flex-start;
       flex-wrap: wrap;
+      app-project:nth-of-type(3n){
+        margin-right: 0;
+      }
     }
   }
 }

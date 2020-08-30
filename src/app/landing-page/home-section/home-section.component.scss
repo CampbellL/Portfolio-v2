@@ -1,0 +1,111 @@
+:host {
+  width: 100%;
+  height: 100vh;
+  background: #36538D url("/assets/herobg-pichi@2x.jpg") no-repeat;
+  background-size: cover;
+  background-blend-mode: multiply;
+  display: flex;
+  align-items: center;
+
+  .container {
+    height: auto;
+    color: white;
+
+    h1 {
+      margin: 10px 0 0;
+      font-size: 34px;
+      font-weight: 800;
+    }
+
+    h2 {
+      margin: 10px 0 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 24px;
+      margin: 0;
+    }
+    div{
+      justify-content: space-between;
+      button {
+        cursor: pointer;
+        margin-right: 1rem;
+        color: white;
+        margin-top: 10px;
+        padding: 10px 36px;
+        background: #7217E2 0 0 no-repeat padding-box;
+        border: 1px solid #7217E2;
+        border-radius: 5px;
+        opacity: 1;
+        &:hover{
+          background-color: white;
+          border: white 1px solid;
+          color: #7217E2;
+        }
+      }
+      button.outline {
+        box-sizing: content-box;
+        color: white;
+        border: 1px solid white;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: transparent;
+        border-radius: 5px;
+        opacity: 1;
+        transition: all ease-in-out 100ms;
+        &:hover{
+          background-color: #7217E2;
+          border: #7217E2 1px solid;
+          color: white;
+        }
+      }
+    }
+
+  }
+  .scroll{
+    width: 30px;
+    height: 50px;
+    position: absolute;
+    bottom: 7.5%;
+    right: 7.5%;
+    cursor: pointer;
+    margin-top: -25px;
+    margin-left: -15px;
+    .mouse{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      border: 2px solid white;
+      border-radius: 20px;
+    }
+    .wheel{
+      width: 4px;
+      height: 4px;
+      top: 10px;
+      left: 50%;
+      position: absolute;
+      background: white;
+      display: block;
+      border-radius: 50%;
+      margin-left: -2px;
+      animation-name: scroll-wheel;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+    }
+  }
+  @keyframes scroll-wheel{
+    from{
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+    to{
+      transform: translate3d(0, 10px, 0);
+      opacity: 0;
+    }
+  }
+}
