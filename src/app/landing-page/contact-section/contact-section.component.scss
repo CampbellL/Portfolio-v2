@@ -3,12 +3,20 @@
 :host {
   display: block;
   height: calc(100vh - 80px);
+  @media screen and (max-width: 768px){
+    min-height: calc(100vh - 80px);
+    height: auto;
+  }
   width: 100%;
   background-color: #141D47;
   padding-top: 100px;
 
   section {
     height: 90%;
+    @media screen and (max-width: 768px){
+      min-height: 90%;
+      height: auto;
+    }
     width: 100%;
     display: flex;
     align-items: center;
@@ -18,12 +26,20 @@
       padding: 3%;
       background-color: white;
       border-radius: 10px;
+      width: 70%;
       height: 60%;
-      width: 50%;
+      @media screen and (max-width: 768px){
+        height: auto;
+        padding: 10%;
+        width: 100%;
+      }
 
       h3 {
         color: #141D47;
         font-weight: bold;
+        @media screen and (max-width: 768px) {
+          margin-bottom: 0.7rem;
+        }
       }
 
       .lower {
@@ -33,12 +49,19 @@
         justify-content: space-between;
         align-items: center;
 
+        @media screen and (max-width: 768px){
+          flex-direction: column;
+        }
+
         div {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           height: 70%;
           width: 45%;
+          @media screen and (max-width: 768px){
+            width: 100%;
+          }
 
           label {
             color: #603C8C;
@@ -69,7 +92,9 @@
           margin-left: auto;
           width: 25%;
           cursor: pointer;
-          margin-right: 1rem;
+          @media screen and (max-width: 768px) {
+            margin-right: 0;
+          }
           color: white;
           margin-top: 10px;
           padding: 10px 36px;

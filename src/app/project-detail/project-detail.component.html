@@ -4,7 +4,6 @@
     <article *ngIf="project">
       <div class="left">
         <iframe *ngIf="project.youtubeEmbedLink" [src]="safeVideoUrl" frameborder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
         <div *ngIf="!project.youtubeEmbedLink" [style.backgroundImage]="'url('+ project.assets[2]?.url +')'">
 
@@ -24,7 +23,7 @@
             </div>
             <div class="buttons">
               <a target="_blank" *ngIf="project.sourceControlUrl" [href]="project.sourceControlUrl">Show Code</a>
-              <a target="_blank" *ngIf="project.projectUrl" [href]="project.projectUrl">Try Now</a>
+              <a target="_blank" *ngIf="project.projectUrl" [href]="project.projectUrl">See Project</a>
             </div>
           </div>
           <span class="line"></span>

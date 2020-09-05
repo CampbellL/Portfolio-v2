@@ -29,7 +29,9 @@
     }
     div{
       justify-content: space-between;
-      button {
+      a {
+        display: inline-block;
+        text-decoration: none;
         cursor: pointer;
         margin-right: 1rem;
         color: white;
@@ -45,7 +47,7 @@
           color: #7217E2;
         }
       }
-      button.outline {
+      a.outline {
         box-sizing: content-box;
         color: white;
         border: 1px solid white;

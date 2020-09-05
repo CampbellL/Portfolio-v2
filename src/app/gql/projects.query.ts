@@ -1,16 +1,17 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import gql from 'graphql-tag';
 
 export const projectsQuery = gql`
   query Projects {
-    projects(first:6, orderBy: dateOfCreation_DESC) {
+    projects(first: 6, orderBy: dateOfCreation_DESC) {
       id
-      category{
+      category {
         title
       }
       title
       shortDescription
       dateOfCreation
-      image{
+      image {
         url
       }
     }
@@ -19,12 +20,12 @@ export const projectsQuery = gql`
 
 export const projectQuery = gql`
   query Project($id: ID) {
-    project(where: {id: $id}) {
+    project(where: { id: $id }) {
       id
-      category{
+      category {
         title
       }
-      assets{
+      assets {
         url
       }
       title
@@ -32,14 +33,14 @@ export const projectQuery = gql`
       sourceControlUrl
       projectUrl
       youtubeEmbedLink
-      longDescription{
+      longDescription {
         html
       }
-      footerContent{
+      footerContent {
         html
       }
       dateOfCreation
-      image{
+      image {
         url
       }
     }
@@ -48,15 +49,19 @@ export const projectQuery = gql`
 
 export const projectsCategoryQuery = gql`
   query Projects($categoryId: ID) {
-    projects(first:6, where: {category_some: {id: $categoryId}}, orderBy: dateOfCreation_DESC) {
+    projects(
+      first: 6
+      where: { category_some: { id: $categoryId } }
+      orderBy: dateOfCreation_DESC
+    ) {
       id
-      category{
+      category {
         title
       }
       title
       shortDescription
       dateOfCreation
-      image{
+      image {
         url
       }
     }
